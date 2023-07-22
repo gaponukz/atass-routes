@@ -35,7 +35,7 @@ class RouteRepository:
 
         for idx, route_data in enumerate(data):
             if route_data['id'] == route.id:
-                data[idx] = route.copy()
+                data[idx] = route.dict()
                 break
         else:
             raise RouteNotFoundError(route.id)
