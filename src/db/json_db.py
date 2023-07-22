@@ -19,11 +19,11 @@ class RouteRepository:
 
     def _write_file(self, data):
         with open(self._filename, 'w') as file:
-            json.dump(data, file)
+            json.dump(data, file, indent=4, default=str)
 
     def create(self, route: Route):
         data = self._read_file()
-        data.append(route.model_dump())
+        data.append(route.dict())
         self._write_file(data)
 
     def read_all(self) -> list[Route]:
@@ -35,7 +35,7 @@ class RouteRepository:
 
         for idx, route_data in enumerate(data):
             if route_data['id'] == route.id:
-                data[idx] = route.model_dump()
+                data[idx] = route.copy()
                 break
         else:
             raise RouteNotFoundError(route.id)

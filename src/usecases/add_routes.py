@@ -57,7 +57,7 @@ class AddRoutesUseCase:
         return routes
     
     def _route_from_prototype(self, prototype: RoutePrototype, date: DatetimeObject) -> Route:
-        new_route = prototype.model_dump()
+        new_route = prototype.copy().dict()
         new_route['move_from']['date'] = date['from']
         new_route['move_to']['date'] = date['to'] + datetime.timedelta(minutes=prototype.move_to.from_start)
 
