@@ -30,7 +30,7 @@ class ViewRoutesHandler:
     
     def get_route_by_id(self, route_id: HashId) -> Route:
         try:
-            self._service.get_route_by_id(route_id)
+            return self._service.get_route_by_id(route_id)
         
         except RouteNotFoundError:
             raise HTTPException(status_code=404, detail="route not found")
