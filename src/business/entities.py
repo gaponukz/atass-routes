@@ -25,17 +25,6 @@ class _RouteBase(pydantic.BaseModel):
     transportation_rules: MultiLanguages = enpty_languages
     id: HashId = str(uuid.uuid4())
 
-class User(pydantic.BaseModel):
-    first_name: str
-    last_name: str
-    phone_number: str
-    email_address: str | None = None
-
-class AuthorizedUser(User):
-    is_authenticated: bool = False
-    password_hash: str | None = None
-    id: HashId = str(uuid.uuid4())
-
 class Place(pydantic.BaseModel):
     country: str
     city: str
@@ -61,9 +50,13 @@ class Spot(pydantic.BaseModel):
             
         super().__init__(**data)
 
-class Passenger(User):
+class Passenger(pydantic.BaseModel):
+    first_name: str
+    last_name: str
+    phone_number: str
     moving_from_id: HashId
     moving_towards_id: HashId
+    email_address: str | None = None
     id: HashId = str(uuid.uuid4())
 
 class Route(_RouteBase):
