@@ -1,4 +1,5 @@
 import json
+from src.business.entities import HashId
 from src.business.entities import Route
 from src.business.errors import RouteNotFoundError
 
@@ -6,7 +7,7 @@ class RouteRepository:
     def __init__(self, filename: str):
         self._filename = filename
 
-    def _read_file(self):
+    def _read_file(self) -> list[dict]:
         try:
             with open(self._filename, 'r') as file:
                 data = json.load(file)
@@ -40,3 +41,12 @@ class RouteRepository:
             raise RouteNotFoundError(route.id)
 
         self._write_file(data)
+
+    def delete(self, route_id: HashId):
+        data = self._read_file()
+        filtered_data = list(filter(lambda r: r['id'] != route_id, data))
+
+        if len(filtered_data) == len(data):
+            raise RouteNotFoundError(route_id)
+        
+        self._write_file(filtered_data)
