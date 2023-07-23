@@ -1,9 +1,11 @@
 import typing
 from fastapi import APIRouter
 from src.business.entities import Path
+from src.business.entities import DayDate
+from src.business.dto import GetAviableRoutesDTO
 
 class AvailabilityService(typing.Protocol):
-    def generate_pathes(self, move_from_city: str, move_to_city: str) -> list[Path]: ...
+    def generate_pathes(self, dto: GetAviableRoutesDTO) -> list[Path]: ...
 
 class RouteAvailabilityHandler:
     def __init__(self, service: AvailabilityService):
@@ -12,5 +14,9 @@ class RouteAvailabilityHandler:
 
         self.router.add_api_route("/available", self.generate_pathes, methods=["GET"])
 
-    def generate_pathes(self, move_from_city: str, move_to_city: str) -> list[Path]:
-        return self._service.generate_pathes(move_from_city, move_to_city)
+    def generate_pathes(self, move_from_city: str, move_to_city: str, date: DayDate) -> list[Path]:
+        return self._service.generate_pathes(GetAviableRoutesDTO(
+            move_from_city=move_from_city,
+            move_to_city=move_to_city,
+            date=date
+        ))

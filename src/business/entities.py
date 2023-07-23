@@ -4,10 +4,10 @@ import typing
 import uuid
 
 HashId: typing.TypeAlias = str
+DayDate: typing.TypeAlias = str
 PricesSchema = dict[HashId, dict[HashId, int]]
 LangCode = typing.Literal['ua', 'en', 'pl']
 MultiLanguages = dict[LangCode, str]
-
 enpty_languages: MultiLanguages = { code: "" for code in typing.get_args(LangCode) }
 
 class _RouteBase(pydantic.BaseModel):

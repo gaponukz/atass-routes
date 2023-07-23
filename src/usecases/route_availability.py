@@ -6,6 +6,7 @@ from src.business.entities import Path
 from src.business.entities import Spot
 from src.business.entities import Passenger
 from src.business.entities import HashId
+from src.business.dto import GetAviableRoutesDTO
 
 class ReadAbleDataBase(typing.Protocol):
     def read_all(self) -> list[Route]: ...
@@ -15,17 +16,20 @@ class RouteAvailabilityUseCase:
     def __init__(self, db: ReadAbleDataBase) -> None:
         self._db = db
     
-    def generate_pathes(self, move_from_city: str, move_to_city: str) -> list[Path]:
+    def generate_pathes(self, dto: GetAviableRoutesDTO) -> list[Path]:
         pathes = []
         routes = self._db.read_all()
 
         for route in routes:
-            if not route.move_from.place.city == move_from_city:
+            if not route.move_from.place.city == dto.move_from_city:
                 continue
 
-            if not route.move_to.place.city == move_to_city:
+            if not route.move_to.place.city == dto.move_to_city:
                 continue
-            
+
+            if not route.move_from.date.strftime("%d.%m.%Y") == dto.date:
+                continue
+
             pathes += self._generating_aviable_pathes(route)
         
         return pathes

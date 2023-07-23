@@ -3,6 +3,7 @@ from src.business.entities import Route
 from src.business.entities import Place
 from src.business.entities import Spot
 from src.business.entities import Passenger
+from src.business.dto import GetAviableRoutesDTO
 from src.usecases.route_availability import RouteAvailabilityUseCase
 
 class DataBaseStub:
@@ -88,7 +89,11 @@ class DataBaseStub:
 
 def generate_all_pathes_test():
     service = RouteAvailabilityUseCase(DataBaseStub())
-    pathes = service.generate_pathes("Ac", "Bc")
+    pathes = service.generate_pathes(GetAviableRoutesDTO(
+        move_from_city="Ac",
+        move_to_city="Bc",
+        date=datetime.datetime.now().strftime("%d.%m.%Y")
+    ))
 
     assert len(pathes) == 4
 
