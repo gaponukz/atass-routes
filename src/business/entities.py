@@ -2,17 +2,11 @@ import pydantic
 import datetime
 import typing
 import uuid
-import typing_extensions
 
 HashId: typing.TypeAlias = str
 PricesSchema = dict[HashId, dict[HashId, int]]
 LangCode = typing.Literal['ua', 'en', 'pl']
 MultiLanguages = dict[LangCode, str]
-
-DatetimeObject = typing_extensions.TypedDict('DatetimeObject', {
-    'from': datetime.datetime,
-    'to': datetime.datetime
-})
 
 enpty_languages: MultiLanguages = { code: "" for code in typing.get_args(LangCode) }
 

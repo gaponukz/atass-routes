@@ -2,8 +2,8 @@ import datetime
 from src.business.entities import Route
 from src.business.entities import Place
 from src.business.entities import SpotTemplate
+from src.business.entities import StartSpotTemplate
 from src.business.entities import RoutePrototype
-from src.business.entities import DatetimeObject
 from src.business.dto import AddRoutesDTO
 from src.usecases.add_routes import AddRoutesUseCase
 
@@ -18,14 +18,13 @@ now_date = datetime.datetime.now()
 
 prototype = RoutePrototype(
     passengers_number=5,
-    move_from=SpotTemplate(
+    move_from=StartSpotTemplate(
         id="start",
         place=Place(
             country="Ac",
             city="Ac",
             street="As"
         ),
-        from_start=0
     ),
     move_to=SpotTemplate(
         id="end",
@@ -57,22 +56,24 @@ prototype = RoutePrototype(
         }
     }
 )
-dates: list[DatetimeObject] = [
-    {"from": now_date, "to": now_date},
-    {"from": now_date, "to": now_date},
-]
 
 def create_routes_from_prototype_test():
     db = DataBaseMock()
     service = AddRoutesUseCase(db)
 
-    service.create_routes_from_prototype(AddRoutesDTO(route_prototype=prototype, datetimes=dates))
+    service.create_routes_from_prototype(AddRoutesDTO(route_prototype=prototype, departure_dates=[
+        now_date + datetime.timedelta(days=1, hours=4),
+        now_date + datetime.timedelta(days=2)
+    ]))
     
-    assert len(db.routes) == len(dates)
+    assert len(db.routes) == 2
 
     for route in db.routes:
         assert route.move_from.place.city == "Ac"
         assert route.move_to.place.city == "Bc"
 
         assert route.prices[route.move_from.id][route.move_to.id] == 10
-        assert route.move_to.date == now_date + datetime.timedelta(minutes=2000)
+        assert route.move_to.date in [
+            now_date + datetime.timedelta(days=1, hours=4, minutes=2000),
+            now_date + datetime.timedelta(days=2, minutes=2000)
+            ]

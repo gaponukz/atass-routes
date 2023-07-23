@@ -5,7 +5,6 @@ from src.business.entities import Route
 from src.business.entities import HashId
 from src.business.entities import PricesSchema
 from src.business.entities import RoutePrototype
-from src.business.entities import DatetimeObject
 from src.business.dto import AddRoutesDTO
 
 class CreatAbleDatabase(typing.Protocol):
