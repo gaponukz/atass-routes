@@ -85,7 +85,11 @@ class SpotTemplate(pydantic.BaseModel):
     from_start: int
     id: HashId
 
+class StartSpotTemplate(pydantic.BaseModel):
+    place: Place
+    id: HashId
+
 class RoutePrototype(_RouteBase):
-    move_from: SpotTemplate
+    move_from: StartSpotTemplate
     move_to: SpotTemplate
     sub_spots: list[SpotTemplate]
