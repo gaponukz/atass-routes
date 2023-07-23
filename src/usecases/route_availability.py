@@ -15,11 +15,17 @@ class RouteAvailabilityUseCase:
     def __init__(self, db: ReadAbleDataBase) -> None:
         self._db = db
     
-    def generate_all_pathes(self) -> list[Path]:
+    def generate_pathes(self, move_from_city: str, move_to_city: str) -> list[Path]:
         pathes = []
         routes = self._db.read_all()
 
         for route in routes:
+            if not route.move_from.place.city == move_from_city:
+                continue
+
+            if not route.move_to.place.city == move_to_city:
+                continue
+            
             pathes += self._generating_aviable_pathes(route)
         
         return pathes

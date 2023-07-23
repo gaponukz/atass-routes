@@ -88,7 +88,7 @@ class DataBaseStub:
 
 def generate_all_pathes_test():
     service = RouteAvailabilityUseCase(DataBaseStub())
-    pathes = service.generate_all_pathes()
+    pathes = service.generate_pathes("Ac", "Bc")
 
     assert len(pathes) == 4
 
