@@ -2,6 +2,7 @@ import typing
 from src.business.entities import Route
 from src.business.entities import HashId
 from src.business.entities import ShortRoute
+from src.business.entities import PublicRoute
 from src.business.errors import RouteNotFoundError
 
 class ReadAbleDataBase(typing.Protocol):
@@ -40,6 +41,12 @@ class ViewRoutesUseCase:
             raise RouteNotFoundError(route_id)
 
         return filtered[0]
+
+    def get_route_info(self, route_id: HashId) -> PublicRoute:
+        route = self.get_route_by_id(route_id)
+        route_dict = route.dict()
+
+        return PublicRoute(**route_dict)
 
     def _shorten_route(self, route: Route) -> ShortRoute:
         return ShortRoute(

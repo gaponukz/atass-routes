@@ -53,14 +53,17 @@ class Passenger(pydantic.BaseModel):
     email_address: str | None = None
     id: HashId = str(uuid.uuid4())
 
-class Route(_RouteBase):
+class PublicRoute(_RouteBase):
     move_from: Spot
     move_to: Spot
     sub_spots: list[Spot] = []
-    passengers: list[Passenger] = []
 
     class Config:
         extra = pydantic.Extra.ignore
+
+class Route(PublicRoute):
+    passengers: list[Passenger] = []
+
 
 class Path(pydantic.BaseModel):
     move_from: Spot

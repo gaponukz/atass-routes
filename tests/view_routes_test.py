@@ -74,3 +74,14 @@ def test_get_route_by_id():
     route = service.get_route_by_id("3")
     assert route.id == "3"
     assert route.move_from.place.city == "Cc"
+
+def test_get_route_info():
+    service = ViewRoutesUseCase(DataBaseStub())
+
+    route = service.get_route_info("1")
+    assert route.id == "1"
+    assert route.move_from.place.city == "Ac"
+
+    route = service.get_route_info("3")
+    assert route.id == "3"
+    assert route.move_from.place.city == "Cc"
