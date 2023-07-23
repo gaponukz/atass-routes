@@ -13,6 +13,9 @@ class RouteRepository:
                 data = json.load(file)
         
         except FileNotFoundError:
+            with open(self._filename, 'w', encoding='utf-8') as out:
+                out.write("[]")
+            
             data = []
         
         return data
