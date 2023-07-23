@@ -2,17 +2,11 @@ import pydantic
 import datetime
 import typing
 import uuid
-import typing_extensions
 
 HashId: typing.TypeAlias = str
 PricesSchema = dict[HashId, dict[HashId, int]]
 LangCode = typing.Literal['ua', 'en', 'pl']
 MultiLanguages = dict[LangCode, str]
-
-DatetimeObject = typing_extensions.TypedDict('DatetimeObject', {
-    'from': datetime.datetime,
-    'to': datetime.datetime
-})
 
 enpty_languages: MultiLanguages = { code: "" for code in typing.get_args(LangCode) }
 
@@ -85,7 +79,11 @@ class SpotTemplate(pydantic.BaseModel):
     from_start: int
     id: HashId
 
+class StartSpotTemplate(pydantic.BaseModel):
+    place: Place
+    id: HashId
+
 class RoutePrototype(_RouteBase):
-    move_from: SpotTemplate
+    move_from: StartSpotTemplate
     move_to: SpotTemplate
     sub_spots: list[SpotTemplate]
