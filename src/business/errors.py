@@ -22,4 +22,5 @@ class UserNotFoundError(Exception):
 
 class RouteNotFoundError(Exception):
     def __init__(self, route_id):
+        self.route_id = route_id
         super().__init__(f"Can not find route with identifier {route_id}")
