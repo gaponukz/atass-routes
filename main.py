@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from src.db.json_db import RouteRepository
 from src.usecases.view_routes import ViewRoutesUseCase
 from src.usecases.route_availability import RouteAvailabilityUseCase
@@ -24,6 +25,13 @@ view_handler = ViewRoutesHandler(view_usecase)
 changeRoutesHandler = ChangeRoutesHandler(edit_routers_usecase, delete_route_usecase)
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 app.include_router(view_handler.router)
 app.include_router(availability_handler.router)
 app.include_router(add_routes_handler.router)
