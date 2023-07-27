@@ -21,16 +21,14 @@ class RouteAvailabilityUseCase:
         routes = self._db.read_all()
 
         for route in routes:
-            if not route.move_from.place.city == dto.move_from_city:
-                continue
+            for path in self._generating_aviable_pathes(route):
+                if path.move_from.place.city != dto.move_from_city:
+                    continue
 
-            if not route.move_to.place.city == dto.move_to_city:
-                continue
+                if path.move_to.place.city != dto.move_to_city:
+                    continue
 
-            if not route.move_from.date.strftime("%d.%m.%Y") == dto.date:
-                continue
-
-            pathes += self._generating_aviable_pathes(route)
+                pathes.append(path)
         
         return pathes
 
