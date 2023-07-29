@@ -17,7 +17,8 @@ class DataBaseStub:
                 move_to=Spot(
                     place=Place(country="Bc", city="Bc", street="Bs"),
                     date=datetime.datetime.now()
-                )
+                ),
+                description={"ua": "Hi", "en": "Hi", "pl": "Hi"}
             ),
             Route(
                 id="2",
@@ -79,9 +80,4 @@ def test_get_route_info():
     service = ViewRoutesUseCase(DataBaseStub())
 
     route = service.get_route_info("1")
-    assert route.id == "1"
-    assert route.move_from.place.city == "Ac"
-
-    route = service.get_route_info("3")
-    assert route.id == "3"
-    assert route.move_from.place.city == "Cc"
+    assert route.description["ua"] == "Hi"

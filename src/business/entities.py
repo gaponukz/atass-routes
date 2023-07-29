@@ -50,20 +50,25 @@ class Passenger(pydantic.BaseModel):
     phone_number: str
     moving_from_id: HashId
     moving_towards_id: HashId
-    email_address: str | None = None
+    email_address: str
     id: HashId = str(uuid.uuid4())
 
-class PublicRoute(_RouteBase):
-    move_from: Spot
-    move_to: Spot
-    sub_spots: list[Spot] = []
+class PublicRoute(pydantic.BaseModel):
+    description: MultiLanguages = enpty_languages
+    rules: MultiLanguages = enpty_languages
+    transportation_rules: MultiLanguages = enpty_languages
 
     class Config:
         extra = pydantic.Extra.ignore
 
-class Route(PublicRoute):
+class Route(_RouteBase):
+    move_from: Spot
+    move_to: Spot
+    sub_spots: list[Spot] = []
     passengers: list[Passenger] = []
 
+    class Config:
+        extra = pydantic.Extra.ignore
 
 class Path(pydantic.BaseModel):
     move_from: Spot

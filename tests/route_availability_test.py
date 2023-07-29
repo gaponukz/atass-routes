@@ -47,6 +47,7 @@ class DataBaseStub:
                         phone_number="1",
                         moving_from_id="start",
                         moving_towards_id="end",
+                        email_address="email@example.com",
                     ),
                     Passenger(
                         id="p3",
@@ -55,6 +56,7 @@ class DataBaseStub:
                         phone_number="3",
                         moving_from_id="sub1",
                         moving_towards_id="sub2",
+                        email_address="email@example.com",
                     ),
                 ],
                 prices={

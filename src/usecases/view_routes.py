@@ -44,9 +44,12 @@ class ViewRoutesUseCase:
 
     def get_route_info(self, route_id: HashId) -> PublicRoute:
         route = self.get_route_by_id(route_id)
-        route_dict = route.dict()
 
-        return PublicRoute(**route_dict)
+        return PublicRoute(
+            description=route.description,
+            transportation_rules=route.transportation_rules,
+            rules=route.rules
+        )
 
     def _shorten_route(self, route: Route) -> ShortRoute:
         return ShortRoute(

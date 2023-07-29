@@ -47,6 +47,7 @@ class DataBaseMock:
                         phone_number="1",
                         moving_from_id="start",
                         moving_towards_id="end",
+                        email_address="email@example.com",
                     ),
                     Passenger(
                         id="p2",
@@ -55,6 +56,7 @@ class DataBaseMock:
                         phone_number="2",
                         moving_from_id="start",
                         moving_towards_id="sub3",
+                        email_address="email@example.com",
                     ),
                     Passenger(
                         id="p3",
@@ -63,6 +65,7 @@ class DataBaseMock:
                         phone_number="3",
                         moving_from_id="sub1",
                         moving_towards_id="sub2",
+                        email_address="email@example.com",
                     ),
                 ],
                 prices={
@@ -130,6 +133,7 @@ def test_update():
                         phone_number="1",
                         moving_from_id="start",
                         moving_towards_id="end",
+                        email_address="email@example.com",
                     ),
                     Passenger(
                         id="p2",
@@ -138,6 +142,7 @@ def test_update():
                         phone_number="2",
                         moving_from_id="start",
                         moving_towards_id="sub3",
+                        email_address="email@example.com",
                     )
                 ],
                 prices={
