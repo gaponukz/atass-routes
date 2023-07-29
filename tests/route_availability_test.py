@@ -49,14 +49,6 @@ class DataBaseStub:
                         moving_towards_id="end",
                     ),
                     Passenger(
-                        id="p2",
-                        first_name="Bf",
-                        last_name="Bl",
-                        phone_number="2",
-                        moving_from_id="start",
-                        moving_towards_id="sub3",
-                    ),
-                    Passenger(
                         id="p3",
                         first_name="Cf",
                         last_name="Cl",
@@ -82,12 +74,7 @@ class DataBaseStub:
             )
         ]
 
-# start sub1 sub2 sub3 end
-# ===== ==== ==== ====
-# ===== ==== ====
-#       ====
-
-def generate_all_pathes_test():
+def test_generate_all_pathes():
     service = RouteAvailabilityUseCase(DataBaseStub())
     pathes = service.generate_pathes(GetAviableRoutesDTO(
         move_from_city="Ac",
@@ -95,18 +82,12 @@ def generate_all_pathes_test():
         date=datetime.datetime.now().strftime("%d.%m.%Y")
     ))
 
-    assert len(pathes) == 4
+    assert len(pathes) == 1
 
-    for path in pathes:
-        assert path.root_route_id == "12345"
+    path = pathes[0]
 
-        if path.move_from.id == "start":
-            assert path.move_to.id == "sub1"
-            assert path.price == 2
+    assert path.root_route_id == "12345"
 
-        if path.move_from.id == "sub3":
-            path.move_to.id == "end"
-            assert path.price == 2
-        
-        if path.move_from.id == "sub2":
-            path.move_to.id in ['sub3', 'end']
+    assert path.move_from.id == "start"
+    assert path.move_to.id == "end"
+    assert path.price == 5
