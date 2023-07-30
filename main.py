@@ -1,5 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
+from src.settings import settings
 from src.db.json_db import RouteRepository
 from src.usecases.view_routes import ViewRoutesUseCase
 from src.usecases.route_availability import RouteAvailabilityUseCase
@@ -14,6 +16,7 @@ from src.handlers.view_routes import ViewRoutesHandler
 from src.handlers.add_passenger import RoutesEventsListener
 
 db = RouteRepository("routes.json")
+config = settings.EnvSettingsExporter().load()
 
 view_usecase = ViewRoutesUseCase(db)
 availability_usecase = RouteAvailabilityUseCase(db)
@@ -25,7 +28,7 @@ add_routes_handler = AddRoutesHandler(add_routes_usecase)
 availability_handler = RouteAvailabilityHandler(availability_usecase)
 view_handler = ViewRoutesHandler(view_usecase)
 changeRoutesHandler = ChangeRoutesHandler(edit_routers_usecase, delete_route_usecase)
-event_listener = RoutesEventsListener(add_passenger_usecase, "amqp://user:password@localhost:5672/")
+event_listener = RoutesEventsListener(add_passenger_usecase, config.rabbitmq_url)
 
 app = FastAPI()
 app.add_middleware(

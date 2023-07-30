@@ -5,23 +5,36 @@ import pika
 
 from src.business.entities import Passenger
 from src.business.dto import AddPassengerDTO
+from urllib.parse import urlparse
 
 class AddPassengerService(typing.Protocol):
     def add_passenger(self, data: AddPassengerDTO): ...
 
 class RoutesEventsListener:
-    def __init__(self, service: AddPassengerService, rabbitUrl: str):
+    def __init__(self, service: AddPassengerService, url: str):
         self.service = service
-        self.connection = pika.BlockingConnection(pika.ConnectionParameters(
-            host="localhost",
-            port="5672",
-            credentials=pika.PlainCredentials('user', 'password')
-        ))
+        self.connection = pika.BlockingConnection(self._connection_from_url(url))
         self.channel = self.connection.channel()
         self.channel.queue_bind(exchange="payments_exchange", queue="payments")
 
+    def _connection_from_url(self, url: str) -> pika.ConnectionParameters:
+        parsed_url = urlparse(url)
+
+        if parsed_url.scheme not in ('amqp', 'amqps'):
+            raise ValueError("Invalid URL scheme. Only 'amqp' and 'amqps' schemes are supported.")
+
+        credentials = None
+        if parsed_url.username and parsed_url.password:
+            credentials = pika.PlainCredentials(parsed_url.username, parsed_url.password)
+
+        return pika.ConnectionParameters(
+            host=parsed_url.hostname or "localhost",
+            port=parsed_url.port or 5672,
+            virtual_host=parsed_url.path.strip('/') or '/',
+            credentials=credentials
+        )
+    
     def callback(self, ch, method, properties, body):
-        print("got new message")
         data = json.loads(body)
         passenger_json = data['passenger']
 
@@ -42,7 +55,6 @@ class RoutesEventsListener:
 
     def _listen(self):
         self.channel.basic_consume(queue="payments", on_message_callback=self.callback, auto_ack=True)
-        print("Listening for messages. To exit press CTRL+C")
         self.channel.start_consuming()
 
     def close(self):
