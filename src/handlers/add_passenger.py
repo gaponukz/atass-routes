@@ -15,7 +15,7 @@ class RoutesEventsListener:
         self.service = service
         self.connection = pika.BlockingConnection(self._connection_from_url(url))
         self.channel = self.connection.channel()
-        self.channel.queue_bind(exchange="payments_exchange", queue="payments")
+        self.channel.queue_bind(exchange="payments_exchange", queue="route_payments")
 
     def _connection_from_url(self, url: str) -> pika.ConnectionParameters:
         parsed_url = urlparse(url)
@@ -54,7 +54,7 @@ class RoutesEventsListener:
         threading.Thread(target=self._listen).start()
 
     def _listen(self):
-        self.channel.basic_consume(queue="payments", on_message_callback=self.callback, auto_ack=True)
+        self.channel.basic_consume(queue="route_payments", on_message_callback=self.callback, auto_ack=True)
         self.channel.start_consuming()
 
     def close(self):
