@@ -13,6 +13,6 @@ class EnvSettingsExporter:
 
     def load(self) -> Settings:
         return Settings(
-            rabbitmq_url=os.getenv("rabbitmq_url"),
-            mongodb_url=os.getenv("mongodb_url")
+            rabbitmq_url=os.getenv("rabbitmq_url") or os.getenv("rabbitmqUrl") or '',
+            mongodb_url=os.getenv("mongodb_url") or os.getenv("mongodbUrl") or '',
         )
