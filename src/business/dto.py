@@ -13,3 +13,7 @@ class AddRoutesDTO(pydantic.BaseModel):
 
 class UpdateRoutesDTO(pydantic.BaseModel):
     route: entities.Route
+
+class AddPassengerDTO(pydantic.BaseModel):
+    route_id: entities.HashId
+    passenger: entities.Passenger

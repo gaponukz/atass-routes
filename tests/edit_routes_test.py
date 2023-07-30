@@ -42,8 +42,7 @@ class DataBaseMock:
                 passengers=[
                     Passenger(
                         id="p1",
-                        first_name="Af",
-                        last_name="Al",
+                        full_name="Af Al",
                         phone_number="1",
                         moving_from_id="start",
                         moving_towards_id="end",
@@ -51,8 +50,7 @@ class DataBaseMock:
                     ),
                     Passenger(
                         id="p2",
-                        first_name="Bf",
-                        last_name="Bl",
+                        full_name="Bf Bl",
                         phone_number="2",
                         moving_from_id="start",
                         moving_towards_id="sub3",
@@ -60,8 +58,7 @@ class DataBaseMock:
                     ),
                     Passenger(
                         id="p3",
-                        first_name="Cf",
-                        last_name="Cl",
+                        full_name="Cf Cl",
                         phone_number="3",
                         moving_from_id="sub1",
                         moving_towards_id="sub2",
@@ -128,8 +125,7 @@ def test_update():
                 passengers=[
                     Passenger(
                         id="p1",
-                        first_name="Af",
-                        last_name="Al",
+                        full_name="Af Al",
                         phone_number="1",
                         moving_from_id="start",
                         moving_towards_id="end",
@@ -137,8 +133,7 @@ def test_update():
                     ),
                     Passenger(
                         id="p2",
-                        first_name="Bf",
-                        last_name="Bl",
+                        full_name="Bf Bl",
                         phone_number="2",
                         moving_from_id="start",
                         moving_towards_id="sub3",

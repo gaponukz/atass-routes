@@ -42,8 +42,7 @@ class DataBaseStub:
                 passengers=[
                     Passenger(
                         id="p1",
-                        first_name="Af",
-                        last_name="Al",
+                        full_name="Af Al",
                         phone_number="1",
                         moving_from_id="start",
                         moving_towards_id="end",
@@ -51,8 +50,7 @@ class DataBaseStub:
                     ),
                     Passenger(
                         id="p3",
-                        first_name="Cf",
-                        last_name="Cl",
+                        full_name="Cf Cl",
                         phone_number="3",
                         moving_from_id="sub1",
                         moving_towards_id="sub2",

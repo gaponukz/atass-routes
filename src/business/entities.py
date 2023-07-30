@@ -45,8 +45,7 @@ class Spot(pydantic.BaseModel):
         super().__init__(**data)
 
 class Passenger(pydantic.BaseModel):
-    first_name: str
-    last_name: str
+    full_name: str
     phone_number: str
     moving_from_id: HashId
     moving_towards_id: HashId
