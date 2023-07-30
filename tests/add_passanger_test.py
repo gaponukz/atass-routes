@@ -3,7 +3,8 @@ from src.business.entities import Route
 from src.business.entities import Spot
 from src.business.entities import Place
 from src.business.entities import Passenger
-from src.usecases.add_passanger import AddPassangerUseCase
+from src.business.dto import AddPassengerDTO
+from src.usecases.add_passenger import AddPassengerUseCase
 from src.business.errors import CannotKillPassengersError
 from src.business.errors import RouteNotFoundError
 
@@ -43,8 +44,7 @@ class DataBaseMock:
                 passengers=[
                     Passenger(
                         id="p1",
-                        first_name="Af",
-                        last_name="Al",
+                        full_name="Af Al",
                         phone_number="1",
                         moving_from_id="start",
                         moving_towards_id="end",
@@ -52,8 +52,7 @@ class DataBaseMock:
                     ),
                     Passenger(
                         id="p2",
-                        first_name="Bf",
-                        last_name="Bl",
+                        full_name="Bf Bl",
                         phone_number="2",
                         moving_from_id="start",
                         moving_towards_id="sub3",
@@ -85,13 +84,12 @@ class DataBaseMock:
     def read_all(self) -> list[Route]:
         return self.routes
 
-def test_add_passanger():
+def test_add_passenger():
     db = DataBaseMock()
-    service = AddPassangerUseCase(db)
+    service = AddPassengerUseCase(db)
 
     passenger1 = Passenger(
-        first_name="Ada",
-        last_name="Nab",
+        full_name="Ada Nab",
         phone_number="123",
         moving_from_id="start",
         moving_towards_id="end",
@@ -99,7 +97,7 @@ def test_add_passanger():
     )
 
     try:
-        service.add_passanger("none_existing_id", passenger1)
+        service.add_passenger(AddPassengerDTO(route_id="none_existing_id", passenger=passenger1))
     
     except RouteNotFoundError as e:
         assert e.route_id == "none_existing_id"
@@ -107,12 +105,12 @@ def test_add_passanger():
     else:
         assert False, "Why we can add a passenger to non existent route?"
     
-    service.add_passanger("12345", passenger1)
+    service.add_passenger(AddPassengerDTO(route_id="12345", passenger=passenger1))
 
     assert len(db.routes[0].passengers) == 3
 
     try:
-        service.add_passanger("12345", passenger1)
+        service.add_passenger(AddPassengerDTO(route_id="12345", passenger=passenger1))
     
     except CannotKillPassengersError as e:
         assert e.passengers_number == 3
@@ -122,4 +120,4 @@ def test_add_passanger():
             assert False, "Why we can add a passenger to full bus?"
         
         else:
-            assert False, 'passanger was not added but got "OK"'
+            assert False, 'passenger was not added but got "OK"'

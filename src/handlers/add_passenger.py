@@ -1,5 +1,6 @@
 import json
 import typing
+import threading
 import pika
 
 from src.business.entities import Passenger
@@ -11,11 +12,16 @@ class AddPassengerService(typing.Protocol):
 class RoutesEventsListener:
     def __init__(self, service: AddPassengerService, rabbitUrl: str):
         self.service = service
-        self.connection = pika.BlockingConnection(pika.ConnectionParameters(rabbitUrl))
+        self.connection = pika.BlockingConnection(pika.ConnectionParameters(
+            host="localhost",
+            port="5672",
+            credentials=pika.PlainCredentials('user', 'password')
+        ))
         self.channel = self.connection.channel()
         self.channel.queue_bind(exchange="payments_exchange", queue="payments")
 
     def callback(self, ch, method, properties, body):
+        print("got new message")
         data = json.loads(body)
         passenger_json = data['passenger']
 
@@ -30,8 +36,11 @@ class RoutesEventsListener:
                 id=passenger_json.get('id', '')
             )
         ))
-
+    
     def listen(self):
+        threading.Thread(target=self._listen).start()
+
+    def _listen(self):
         self.channel.basic_consume(queue="payments", on_message_callback=self.callback, auto_ack=True)
         print("Listening for messages. To exit press CTRL+C")
         self.channel.start_consuming()

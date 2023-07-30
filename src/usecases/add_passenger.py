@@ -11,11 +11,11 @@ class Database(typing.Protocol):
 
     def update(self, route: Route): ...
 
-class AddPassangerUseCase:
+class AddPassengerUseCase:
     def __init__(self, db: Database):
         self._db = db
     
-    def add_passanger(self, data: AddPassengerDTO):
+    def add_passenger(self, data: AddPassengerDTO):
         routes = list(filter(lambda r: r.id == data.route_id, self._db.read_all()))
 
         if not routes:
