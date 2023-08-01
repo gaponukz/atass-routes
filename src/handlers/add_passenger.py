@@ -39,14 +39,14 @@ class RoutesEventsListener:
         passenger_json = data['passenger']
 
         self.service.add_passenger(AddPassengerDTO(
-            route_id=data.get('routeId') or data.get('route_id'),
+            route_id=data.get('routeId'),
             passenger=Passenger(
-                full_name=passenger_json.get('fullName') or passenger_json.get('full_name'),
-                phone_number=passenger_json.get('phoneNumber') or passenger_json.get('phone_number') or passenger_json.get('phone'),
-                moving_from_id=passenger_json.get("movingFromId") or passenger_json.get("moving_from_id"),
-                moving_towards_id=passenger_json.get("movingTowardsId") or passenger_json.get('moving_towards_id'),
-                email_address=passenger_json.get('emailAddress') or passenger_json.get('gmail'),
-                id=passenger_json.get('id', '')
+                full_name=passenger_json['fullName'],
+                phone_number=passenger_json['phoneNumber'],
+                moving_from_id=passenger_json['movingFromId'],
+                moving_towards_id=passenger_json['movingTowardsId'],
+                email_address=passenger_json['gmail'],
+                id=passenger_json['id']
             )
         ))
     

@@ -50,7 +50,7 @@ class Passenger(pydantic.BaseModel):
     moving_from_id: HashId
     moving_towards_id: HashId
     email_address: str
-    id: HashId = str(uuid.uuid4())
+    id: HashId = ''
 
 class PublicRoute(pydantic.BaseModel):
     description: MultiLanguages = enpty_languages
