@@ -2,8 +2,9 @@ import typing
 from src.business.entities import Route
 from src.business.entities import HashId
 from src.business.entities import ShortRoute
-from src.business.entities import PublicRoute
+from src.business.entities import PathInfo
 from src.business.errors import RouteNotFoundError
+from src.business.errors import SpotNotFoundError
 
 class ReadAbleDataBase(typing.Protocol):
     def read_all(self) -> list[Route]: ...
@@ -42,10 +43,26 @@ class ViewRoutesUseCase:
 
         return filtered[0]
 
-    def get_route_info(self, route_id: HashId) -> PublicRoute:
+    def get_path_info(self, route_id: HashId, move_from: HashId, move_to: HashId) -> PathInfo:
         route = self.get_route_by_id(route_id)
+        routes_spots = route.sub_spots.copy()
+        routes_spots.insert(0, route.move_from)
+        routes_spots.insert(-1, route.move_to)
 
-        return PublicRoute(
+        from_spot = list(filter(lambda s: s.id == move_from, routes_spots))
+        to_spot = list(filter(lambda s: s.id == move_to, routes_spots))
+
+        if not from_spot:
+            raise SpotNotFoundError(route_id, move_from)
+
+        if not to_spot:
+            raise SpotNotFoundError(route_id, move_to)
+        
+        return PathInfo(
+            move_from=from_spot[0],
+            move_to=to_spot[0],
+            price=route.prices[move_from][move_to],
+            root_route_id=route_id,
             description=route.description,
             transportation_rules=route.transportation_rules,
             rules=route.rules

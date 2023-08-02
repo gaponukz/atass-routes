@@ -52,13 +52,14 @@ class Passenger(pydantic.BaseModel):
     email_address: str
     id: HashId = ''
 
-class PublicRoute(pydantic.BaseModel):
+class PathInfo(pydantic.BaseModel):
+    move_from: Spot
+    move_to: Spot
+    price: int
+    root_route_id: HashId
     description: MultiLanguages = enpty_languages
     rules: MultiLanguages = enpty_languages
     transportation_rules: MultiLanguages = enpty_languages
-
-    class Config:
-        extra = pydantic.Extra.ignore
 
 class Route(_RouteBase):
     move_from: Spot

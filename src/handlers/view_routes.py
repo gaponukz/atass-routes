@@ -4,8 +4,9 @@ from fastapi import HTTPException
 from src.business.entities import Route
 from src.business.entities import HashId
 from src.business.entities import ShortRoute
-from src.business.entities import PublicRoute
+from src.business.entities import PathInfo
 from src.business.errors import RouteNotFoundError
+from src.business.errors import SpotNotFoundError
 
 class ViewService(typing.Protocol):
     def get_unique_routes(self) -> list[ShortRoute]: ...
@@ -14,7 +15,7 @@ class ViewService(typing.Protocol):
 
     def get_route_by_id(self, route_id: HashId) -> Route: ...
 
-    def get_route_info(self, route_id: HashId) -> PublicRoute: ...
+    def get_path_info(self, route_id: HashId, move_from: HashId, move_to: HashId) -> PathInfo: ...
 
 class ViewRoutesHandler:
     def __init__(self, service: ViewService):
@@ -24,7 +25,7 @@ class ViewRoutesHandler:
         self.router.add_api_route("/get_unique_routes", self.get_unique_routes, methods=["GET"])
         self.router.add_api_route("/get_routes_family", self.get_routes_family_by_cities, methods=["POST"])
         self.router.add_api_route("/get_route_by_id", self.get_route_by_id, methods=["GET"])
-        self.router.add_api_route("/get_route_info", self.get_route_info, methods=["GET"])
+        self.router.add_api_route("/get_path_info", self.get_path_info, methods=["GET"])
     
     def get_unique_routes(self) ->  list[ShortRoute]:
         return self._service.get_unique_routes()
@@ -39,9 +40,9 @@ class ViewRoutesHandler:
         except RouteNotFoundError:
             raise HTTPException(status_code=404, detail="route not found")
 
-    def get_route_info(self, route_id: HashId) -> PublicRoute:
+    def get_path_info(self, route_id: HashId, move_from: HashId, move_to: HashId) -> PathInfo:
         try:
-            return self._service.get_route_info(route_id)
+            return self._service.get_path_info(route_id, move_from=move_from, move_to=move_to)
         
-        except RouteNotFoundError:
-            raise HTTPException(status_code=404, detail="route not found")
+        except (RouteNotFoundError, SpotNotFoundError) as error:
+            raise HTTPException(status_code=404, detail=str(error))
