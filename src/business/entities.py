@@ -52,7 +52,7 @@ class Passenger(pydantic.BaseModel):
     email_address: str
     id: HashId = ''
 
-class PathInfo(pydantic.Model):
+class PathInfo(pydantic.BaseModel):
     move_from: Spot
     move_to: Spot
     price: int

@@ -53,10 +53,10 @@ class ViewRoutesUseCase:
         to_spot = list(filter(lambda s: s.id == move_to, routes_spots))
 
         if not from_spot:
-            raise SpotNotFoundError(move_from)
+            raise SpotNotFoundError(route_id, move_from)
 
         if not to_spot:
-            raise SpotNotFoundError(move_to)
+            raise SpotNotFoundError(route_id, move_to)
         
         return PathInfo(
             move_from=from_spot[0],

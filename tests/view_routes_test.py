@@ -2,6 +2,7 @@ import datetime
 from src.business.entities import Route
 from src.business.entities import Spot
 from src.business.entities import Place
+from src.business.errors import SpotNotFoundError
 from src.usecases.view_routes import ViewRoutesUseCase
 
 class DataBaseStub:
@@ -82,6 +83,15 @@ def test_get_route_by_id():
 def test_get_path_info():
     service = ViewRoutesUseCase(DataBaseStub())
 
+    try:
+        path = service.get_path_info("1", "13", "12")
+    
+    except SpotNotFoundError:
+        pass
+    
+    else:
+        assert False, "Can find not existing spot"
+    
     path = service.get_path_info("1", "11", "12")
 
     assert path.price == 100
