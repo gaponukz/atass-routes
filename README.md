@@ -42,7 +42,7 @@
 
 ### Get route full info
 
-- URL: `/get_path_info?route_id={routeid}`
+- URL: `/get_path_info?route_id={routeid}&move_from={fromId}&move_to={toId}`
 - Method: `GET`
 - Description: Return route info by id
 - Response example:
