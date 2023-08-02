@@ -34,7 +34,6 @@
       "is_active": true,
       "id": "..."
     },
-    "date": "",
     "price": 600,
     "root_route_id": "..."
   }
@@ -43,12 +42,38 @@
 
 ### Get route full info
 
-- URL: `/get_route_info?route_id={routeid}`
+- URL: `/get_path_info?route_id={routeid}`
 - Method: `GET`
 - Description: Return route info by id
 - Response example:
 ```json
 {
+    "move_from": {
+      "place": {
+        "country": "A",
+        "city": "A",
+        "street": "A",
+        "map_url": "http//:...",
+        "id": "..."
+      },
+      "date": "yyyy-mm-ddThh:mm:ss.ms",
+      "is_active": true,
+      "id": "..."
+    },
+    "move_to": {
+      "place": {
+        "country": "B",
+        "city": "B",
+        "street": "B",
+        "map_url": "http//:...",
+        "id": "..."
+      },
+      "date": "yyyy-mm-ddThh:mm:ss.ms",
+      "is_active": true,
+      "id": "..."
+    },
+    "price": 600,
+    "root_route_id": "...",
     "description": {
         "ua": "Привіт",
         "en": "Hello",
@@ -63,6 +88,6 @@
         "ua": "Використовуйте контейнери",
         "en": "Use containers",
         "pl": "Użyj pojemników"
-    },
+    }
 }
 ```

@@ -11,14 +11,17 @@ class DataBaseStub:
                 id="1",
                 passengers_number=1,
                 move_from=Spot(
+                    id="11",
                     place=Place(country="Ac", city="Ac", street="As"),
                     date=datetime.datetime.now()
                 ),
                 move_to=Spot(
+                    id="12",
                     place=Place(country="Bc", city="Bc", street="Bs"),
                     date=datetime.datetime.now()
                 ),
-                description={"ua": "Hi", "en": "Hi", "pl": "Hi"}
+                description={"ua": "Hi", "en": "Hi", "pl": "Hi"},
+                prices={"11": {"12": 100}}
             ),
             Route(
                 id="2",
@@ -76,8 +79,11 @@ def test_get_route_by_id():
     assert route.id == "3"
     assert route.move_from.place.city == "Cc"
 
-def test_get_route_info():
+def test_get_path_info():
     service = ViewRoutesUseCase(DataBaseStub())
 
-    route = service.get_route_info("1")
-    assert route.description["ua"] == "Hi"
+    path = service.get_path_info("1", "11", "12")
+
+    assert path.price == 100
+    assert path.description["ua"] == "Hi"
+    assert path.root_route_id == "1"
