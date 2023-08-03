@@ -24,13 +24,6 @@ class Place(pydantic.BaseModel):
     city: str
     street: str
     map_url: pydantic.HttpUrl | None = None
-    id: str | None = None
-
-    def __init__(self, **data):
-        if 'id' not in data:
-            data['id'] = str(uuid.uuid4())
-
-        super().__init__(**data)
 
 class Spot(pydantic.BaseModel):
     place: Place

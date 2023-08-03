@@ -21,6 +21,13 @@ class DataBaseStub:
                     place=Place(country="Bc", city="Bc", street="Bs"),
                     date=datetime.datetime.now()
                 ),
+                sub_spots=[
+                    Spot(
+                        id="13",
+                        place=Place(country="Cc", city="Cc", street="Cs"),
+                        date=datetime.datetime.now()
+                    )
+                ],
                 description={"ua": "Hi", "en": "Hi", "pl": "Hi"},
                 prices={"11": {"12": 100}}
             ),
@@ -84,7 +91,7 @@ def test_get_path_info():
     service = ViewRoutesUseCase(DataBaseStub())
 
     try:
-        path = service.get_path_info("1", "13", "12")
+        path = service.get_path_info("1", "14", "12")
     
     except SpotNotFoundError:
         pass
