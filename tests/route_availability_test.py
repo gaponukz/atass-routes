@@ -77,6 +77,22 @@ class DataBaseStub:
 def test_generate_all_pathes():
     service = RouteAvailabilityUseCase(DataBaseStub())
     pathes = service.generate_pathes(GetAviableRoutesDTO(
+        move_from_city="Gc",
+        move_to_city="Bc",
+        date=(datetime.datetime.now() + datetime.timedelta(days=1)).strftime("%d.%m.%Y")
+    ))
+
+    assert len(pathes) == 0
+
+    pathes = service.generate_pathes(GetAviableRoutesDTO(
+        move_from_city="Gc",
+        move_to_city="Bc",
+        date=datetime.datetime.now().strftime("%d.%m.%Y")
+    ))
+
+    assert len(pathes) == 0
+
+    pathes = service.generate_pathes(GetAviableRoutesDTO(
         move_from_city="Ac",
         move_to_city="Bc",
         date=datetime.datetime.now().strftime("%d.%m.%Y")

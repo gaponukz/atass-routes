@@ -28,6 +28,9 @@ class RouteAvailabilityUseCase:
                 if path.move_to.place.city != dto.move_to_city:
                     continue
 
+                if path.move_from.date.strftime("%d.%m.%Y") != dto.date:
+                    continue
+
                 pathes.append(path)
         
         return pathes
