@@ -19,6 +19,12 @@ class _RouteBase(pydantic.BaseModel):
     transportation_rules: MultiLanguages = enpty_languages
     id: HashId = str(uuid.uuid4())
 
+    def __init__(self, **data):
+        if 'id' not in data:
+            data['id'] = str(uuid.uuid4())
+            
+        super().__init__(**data)
+
 class Place(pydantic.BaseModel):
     country: str
     city: str
@@ -68,7 +74,6 @@ class Path(pydantic.BaseModel):
     move_to: Spot
     price: int
     root_route_id: HashId
-    id: HashId = str(uuid.uuid4())
 
 class ShortRoute(pydantic.BaseModel):
     move_from: Place
