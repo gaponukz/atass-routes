@@ -34,6 +34,21 @@ class RouteAvailabilityUseCase:
                 pathes.append(path)
         
         return pathes
+    
+    def get_availability_graph(self) -> dict[str, list[str]]:
+        routes = self._db.read_all()
+        result: dict[str, list[str]] = {}
+
+        for route in routes:
+            for path in self._generating_aviable_pathes(route):
+                if not result.get(path.move_from.place.city):
+                    result[path.move_from.place.city] = []
+                
+                result[path.move_from.place.city].append(path.move_to.place.city)
+        
+        print(result)
+        
+        return result
 
     def _generating_aviable_pathes(self, route: Route) -> list[Path]:
         all_spots = self._get_routes_spots(route)

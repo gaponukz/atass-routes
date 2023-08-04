@@ -28,7 +28,7 @@ add_routes_handler = AddRoutesHandler(add_routes_usecase)
 availability_handler = RouteAvailabilityHandler(availability_usecase)
 view_handler = ViewRoutesHandler(view_usecase)
 changeRoutesHandler = ChangeRoutesHandler(edit_routers_usecase, delete_route_usecase)
-event_listener = RoutesEventsListener(add_passenger_usecase, config.rabbitmq_url)
+# event_listener = RoutesEventsListener(add_passenger_usecase, config.rabbitmq_url)
 
 app = FastAPI()
 app.add_middleware(
@@ -43,4 +43,4 @@ app.include_router(availability_handler.router)
 app.include_router(add_routes_handler.router)
 app.include_router(changeRoutesHandler.router)
 
-event_listener.listen()
+# event_listener.listen()
