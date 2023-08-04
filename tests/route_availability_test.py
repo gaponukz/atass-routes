@@ -107,3 +107,10 @@ def test_generate_all_pathes():
     assert path.move_from.id == "start"
     assert path.move_to.id == "end"
     assert path.price == 5
+
+def test_get_availability_graph():
+    service = RouteAvailabilityUseCase(DataBaseStub())
+    availability_graph = service.get_availability_graph()
+    expected_graph = {'Ac': ['Cc', 'Dc', 'Ec', 'Bc'], 'Cc': ['Dc', 'Ec', 'Bc'], 'Dc': ['Ec', 'Bc'], 'Ec': ['Bc']}
+
+    assert availability_graph == expected_graph

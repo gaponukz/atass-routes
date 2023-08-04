@@ -9,7 +9,7 @@ class RouteRepository:
 
     def _read_file(self) -> list[dict]:
         try:
-            with open(self._filename, 'r') as file:
+            with open(self._filename, 'r', encoding='utf-8') as file:
                 data = json.load(file)
         
         except FileNotFoundError:
@@ -21,7 +21,7 @@ class RouteRepository:
         return data
 
     def _write_file(self, data):
-        with open(self._filename, 'w') as file:
+        with open(self._filename, 'w', encoding='utf-8') as file:
             json.dump(data, file, indent=4, default=str)
 
     def create(self, route: Route):

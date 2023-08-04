@@ -41,7 +41,6 @@
 ```
 
 ### Get route full info
-
 - URL: `/get_path_info?route_id={routeid}&move_from={fromId}&move_to={toId}`
 - Method: `GET`
 - Description: Return route info by id
@@ -89,5 +88,23 @@
         "en": "Use containers",
         "pl": "Użyj pojemników"
     }
+}
+```
+
+### Get availability graph
+
+- URL: `/availability_graph`
+- Method: `GET`
+- Description: Return graph of aviable pathes
+- Response example:
+```json
+{
+  "Київ": [
+    "Львів",
+    "Варшава"
+  ],
+    "Львів": [
+    "Варшава"
+  ]
 }
 ```
