@@ -46,8 +46,6 @@ class RouteAvailabilityUseCase:
                 
                 result[path.move_from.place.city].append(path.move_to.place.city)
         
-        print(result)
-        
         return result
 
     def _generating_aviable_pathes(self, route: Route) -> list[Path]:

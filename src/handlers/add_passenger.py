@@ -34,8 +34,8 @@ class RoutesEventsListener:
             credentials=credentials
         )
     
-    def callback(self, ch, method, properties, body):
-        data = json.loads(body)
+    def process_message(self, message: str):
+        data = json.loads(message)
         passenger_json = data['passenger']
 
         self.service.add_passenger(AddPassengerDTO(
@@ -49,12 +49,15 @@ class RoutesEventsListener:
                 id=passenger_json['id']
             )
         ))
-    
+
+    def _callback(self, ch, method, properties, body):
+        self.process_message(body)
+        
     def listen(self):
         threading.Thread(target=self._listen).start()
 
     def _listen(self):
-        self.channel.basic_consume(queue="route_payments", on_message_callback=self.callback, auto_ack=True)
+        self.channel.basic_consume(queue="route_payments", on_message_callback=self._callback, auto_ack=True)
         self.channel.start_consuming()
 
     def close(self):
