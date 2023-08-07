@@ -59,8 +59,18 @@ class RouteAvailabilityUseCase:
         sits: defaultdict[str, defaultdict[str, bool]] = defaultdict(defaultdict)
 
         for passenger in route.passengers:
-            move_from = list(filter(lambda s: s.id == passenger.moving_from_id, all_spots))[0]
-            move_to = list(filter(lambda s: s.id == passenger.moving_towards_id, all_spots))[0]
+            move_froms = list(filter(lambda s: s.id == passenger.moving_from_id, all_spots))
+            if not move_froms:
+                continue
+
+            move_from = move_froms[0]
+
+            move_tos = list(filter(lambda s: s.id == passenger.moving_towards_id, all_spots))
+            if not move_tos:
+                continue
+
+            move_to = move_tos[0]
+
             passing_spots = filter(lambda s: move_from.date <= s.date < move_to.date, all_spots)
 
             for spot in passing_spots:
