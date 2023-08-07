@@ -29,8 +29,8 @@ class ViewRoutesUseCase:
 
     def get_routes_family_by_cities(self, move_from_city: str, move_to_city: str) -> list[Route]:
         routes = self._db.read_all()
-        filtered = filter(lambda route: route.move_from.place.city == move_from_city 
-                          and route.move_to.place.city == move_to_city, routes)
+        filtered = filter(lambda route: route.move_from.place.city.lower() == move_from_city.lower() 
+                          and route.move_to.place.city.lower() == move_to_city.lower(), routes)
 
         return list(filtered)
     

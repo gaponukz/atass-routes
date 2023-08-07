@@ -23,7 +23,7 @@ class ViewRoutesHandler:
         self._service = service
 
         self.router.add_api_route("/get_unique_routes", self.get_unique_routes, methods=["GET"])
-        self.router.add_api_route("/get_routes_family", self.get_routes_family_by_cities, methods=["POST"])
+        self.router.add_api_route("/get_routes_family", self.get_routes_family_by_cities, methods=["GET"])
         self.router.add_api_route("/get_route_by_id", self.get_route_by_id, methods=["GET"])
         self.router.add_api_route("/get_path_info", self.get_path_info, methods=["GET"])
     
