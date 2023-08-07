@@ -22,14 +22,15 @@ class RouteAvailabilityUseCase:
 
         for route in routes:
             for path in self._generating_aviable_pathes(route):
-                if path.move_from.place.city != dto.move_from_city:
+                if path.move_from.place.city.lower() != dto.move_from_city.lower():
                     continue
 
-                if path.move_to.place.city != dto.move_to_city:
+                if path.move_to.place.city.lower() != dto.move_to_city.lower():
                     continue
-
-                if path.move_from.date.strftime("%d.%m.%Y") != dto.date:
-                    continue
+                
+                if dto.date != "*":
+                    if path.move_from.date.strftime("%d.%m.%Y") != dto.date:
+                        continue
 
                 pathes.append(path)
         
