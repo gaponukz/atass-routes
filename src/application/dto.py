@@ -17,3 +17,37 @@ class UpdateRoutesDTO(pydantic.BaseModel):
 class AddPassengerDTO(pydantic.BaseModel):
     route_id: entities.HashId
     passenger: entities.Passenger
+
+class PathInfoDTO(pydantic.BaseModel):
+    move_from: entities.Spot
+    move_to: entities.Spot
+    price: int
+    root_route_id: entities.HashId
+    description: entities.MultiLanguages
+    rules: entities.MultiLanguages
+    transportation_rules: entities.MultiLanguages
+
+class ShortRouteDTO(pydantic.BaseModel):
+    move_from: entities.Place
+    move_to: entities.Place
+    count: int
+
+class SpotTemplateDTO(pydantic.BaseModel):
+    place: entities.Place
+    from_start: int
+    id: entities.HashId
+
+class StartSpotTemplateDTO(pydantic.BaseModel):
+    place: entities.Place
+    id: entities.HashId
+
+class RoutePrototypeDTO(pydantic.BaseModel):
+    move_from: StartSpotTemplateDTO
+    move_to: SpotTemplateDTO
+    sub_spots: list[SpotTemplateDTO]
+    passengers_number: int
+    description: entities.MultiLanguages
+    rules: entities.MultiLanguages
+    transportation_rules: entities.MultiLanguages
+    is_active: bool = True
+    prices: entities.PricesSchema = {}
