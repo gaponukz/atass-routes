@@ -1,10 +1,10 @@
 import typing
 from src.logger._interface import ILogger
 from src.business.entities import Path
-from src.business.dto import GetAvailableRoutesDTO
+from src.business.dto import GetAviableRoutesDTO
 
 class AvailabilityService(typing.Protocol):
-    def generate_paths(self, dto: GetAvailableRoutesDTO) -> list[Path]: ...
+    def generate_paths(self, dto: GetAviableRoutesDTO) -> list[Path]: ...
     def get_availability_graph(self) -> dict[str, list[str]]: ...
 
 class AvailabilityServiceLogger:
@@ -12,7 +12,7 @@ class AvailabilityServiceLogger:
         self._service = service
         self._logger = logger
 
-    def generate_paths(self, dto: GetAvailableRoutesDTO) -> list[Path]:
+    def generate_paths(self, dto: GetAviableRoutesDTO) -> list[Path]:
         try:
             return self._service.generate_paths(dto)
         
