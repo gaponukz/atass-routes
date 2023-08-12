@@ -1,8 +1,8 @@
 import typing
 from fastapi import APIRouter
-from src.business.entities import Path
-from src.business.entities import DayDate
-from src.business.dto import GetAviableRoutesDTO
+from src.domain.entities import Path
+from src.domain.entities import DayDate
+from src.application.dto import GetAviableRoutesDTO
 
 class AvailabilityService(typing.Protocol):
     def generate_pathes(self, dto: GetAviableRoutesDTO) -> list[Path]: ...

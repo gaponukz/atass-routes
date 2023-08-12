@@ -1,10 +1,10 @@
 import typing
-from src.business.entities import Route
-from src.business.entities import HashId
-from src.business.entities import ShortRoute
-from src.business.entities import PathInfo
-from src.business.errors import RouteNotFoundError
-from src.business.errors import SpotNotFoundError
+from src.domain.entities import Route
+from src.domain.entities import HashId
+from src.domain.entities import ShortRoute
+from src.domain.entities import PathInfo
+from src.domain.errors import RouteNotFoundError
+from src.domain.errors import SpotNotFoundError
 
 class ReadAbleDataBase(typing.Protocol):
     def read_all(self) -> list[Route]: ...

@@ -1,11 +1,11 @@
 import typing
 import datetime
 import uuid
-from src.business.entities import Route
-from src.business.entities import HashId
-from src.business.entities import PricesSchema
-from src.business.entities import RoutePrototype
-from src.business.dto import AddRoutesDTO
+from src.domain.entities import Route
+from src.domain.entities import HashId
+from src.domain.entities import PricesSchema
+from src.domain.entities import RoutePrototype
+from src.application.dto import AddRoutesDTO
 
 class CreatAbleDatabase(typing.Protocol):
     def create(self, route: Route): ...

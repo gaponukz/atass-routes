@@ -1,5 +1,5 @@
 import typing
-from src.business.entities import HashId
+from src.domain.entities import HashId
 
 class DeleteAbleDataBase(typing.Protocol):
     def delete(self, route_id: HashId): ...

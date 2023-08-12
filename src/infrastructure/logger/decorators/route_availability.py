@@ -1,7 +1,7 @@
 import typing
-from src.logger._interface import ILogger
-from src.business.entities import Path
-from src.business.dto import GetAviableRoutesDTO
+from src.infrastructure.logger._interface import ILogger
+from src.domain.entities import Path
+from src.application.dto import GetAviableRoutesDTO
 
 class AvailabilityService(typing.Protocol):
     def generate_paths(self, dto: GetAviableRoutesDTO) -> list[Path]: ...

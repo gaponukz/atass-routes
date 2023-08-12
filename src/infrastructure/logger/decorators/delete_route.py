@@ -1,6 +1,6 @@
 import typing
-from src.logger._interface import ILogger
-from src.business.entities import HashId
+from src.infrastructure.logger._interface import ILogger
+from src.domain.entities import HashId
 
 class DeleteRouteService(typing.Protocol):
     def delete(self, route_id: HashId): ...

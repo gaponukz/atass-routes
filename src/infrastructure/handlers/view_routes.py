@@ -1,12 +1,12 @@
 import typing
 from fastapi import APIRouter
 from fastapi import HTTPException
-from src.business.entities import Route
-from src.business.entities import HashId
-from src.business.entities import ShortRoute
-from src.business.entities import PathInfo
-from src.business.errors import RouteNotFoundError
-from src.business.errors import SpotNotFoundError
+from src.domain.entities import Route
+from src.domain.entities import HashId
+from src.domain.entities import ShortRoute
+from src.domain.entities import PathInfo
+from src.domain.errors import RouteNotFoundError
+from src.domain.errors import SpotNotFoundError
 
 class ViewService(typing.Protocol):
     def get_unique_routes(self) -> list[ShortRoute]: ...

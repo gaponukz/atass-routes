@@ -1,6 +1,6 @@
 import typing
-from src.logger._interface import ILogger
-from src.business.dto import AddRoutesDTO
+from src.infrastructure.logger._interface import ILogger
+from src.application.dto import AddRoutesDTO
 
 class AddRoutesService(typing.Protocol):
     def create_routes_from_prototype(self, dto: AddRoutesDTO): ...

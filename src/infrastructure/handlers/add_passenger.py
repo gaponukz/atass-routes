@@ -3,8 +3,8 @@ import typing
 import threading
 import pika
 
-from src.business.entities import Passenger
-from src.business.dto import AddPassengerDTO
+from src.domain.entities import Passenger
+from src.application.dto import AddPassengerDTO
 from urllib.parse import urlparse
 
 class AddPassengerService(typing.Protocol):

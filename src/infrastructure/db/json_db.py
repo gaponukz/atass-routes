@@ -1,7 +1,7 @@
 import json
-from src.business.entities import HashId
-from src.business.entities import Route
-from src.business.errors import RouteNotFoundError
+from src.domain.entities import HashId
+from src.domain.entities import Route
+from src.domain.errors import RouteNotFoundError
 
 class RouteRepository:
     def __init__(self, filename: str):

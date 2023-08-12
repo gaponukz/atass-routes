@@ -1,9 +1,9 @@
 import datetime
-from src.business.entities import Route
-from src.business.entities import Spot
-from src.business.entities import Place
-from src.business.entities import HashId
-from src.usecases.delete_route import DeleteRouteUseCase
+from src.domain.entities import Route
+from src.domain.entities import Spot
+from src.domain.entities import Place
+from src.domain.entities import HashId
+from src.application.usecases.delete_route import DeleteRouteUseCase
 
 class DataBaseMock:
     def __init__(self):

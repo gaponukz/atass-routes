@@ -1,6 +1,6 @@
 import datetime
 import pydantic
-from src.business import entities
+from src.domain import entities
 
 class GetAviableRoutesDTO(pydantic.BaseModel):
     move_from_city: str

@@ -1,11 +1,11 @@
 import datetime
-from src.business.entities import Route
-from src.business.entities import Place
-from src.business.entities import SpotTemplate
-from src.business.entities import StartSpotTemplate
-from src.business.entities import RoutePrototype
-from src.business.dto import AddRoutesDTO
-from src.usecases.add_routes import AddRoutesUseCase
+from src.domain.entities import Route
+from src.domain.entities import Place
+from src.domain.entities import SpotTemplate
+from src.domain.entities import StartSpotTemplate
+from src.domain.entities import RoutePrototype
+from src.application.dto import AddRoutesDTO
+from src.application.usecases.add_routes import AddRoutesUseCase
 
 class DataBaseMock:
     def __init__(self) -> None:

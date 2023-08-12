@@ -1,12 +1,12 @@
 import datetime
-from src.business.entities import Route
-from src.business.entities import Spot
-from src.business.entities import Place
-from src.business.entities import Passenger
-from src.business.dto import AddPassengerDTO
-from src.usecases.add_passenger import AddPassengerUseCase
-from src.business.errors import CannotKillPassengersError
-from src.business.errors import RouteNotFoundError
+from src.domain.entities import Route
+from src.domain.entities import Spot
+from src.domain.entities import Place
+from src.domain.entities import Passenger
+from src.domain.errors import CannotKillPassengersError
+from src.domain.errors import RouteNotFoundError
+from src.application.dto import AddPassengerDTO
+from src.application.usecases.add_passenger import AddPassengerUseCase
 
 class DataBaseMock:
     def __init__(self):

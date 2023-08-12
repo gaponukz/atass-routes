@@ -1,9 +1,9 @@
 import typing
-from src.logger._interface import ILogger
-from src.business.entities import ShortRoute
-from src.business.entities import PathInfo
-from src.business.entities import Route
-from src.business.entities import HashId
+from src.infrastructure.logger._interface import ILogger
+from src.domain.entities import ShortRoute
+from src.domain.entities import PathInfo
+from src.domain.entities import Route
+from src.domain.entities import HashId
 
 class ViewService(typing.Protocol):
     def get_unique_routes(self) -> list[ShortRoute]: ...
