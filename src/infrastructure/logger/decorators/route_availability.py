@@ -4,17 +4,17 @@ from src.domain.entities import Path
 from src.application.dto import GetAviableRoutesDTO
 
 class AvailabilityService(typing.Protocol):
-    def generate_paths(self, dto: GetAviableRoutesDTO) -> list[Path]: ...
-    def get_availability_graph(self) -> dict[str, list[str]]: ...
+    def generate_pathes(self, dto: GetAviableRoutesDTO) -> list[Path]: ...
+    def get_availability_graph(self) -> dict[str, list[str]]: ... 
 
 class AvailabilityServiceLogger:
     def __init__(self, service: AvailabilityService, logger: ILogger):
         self._service = service
         self._logger = logger
 
-    def generate_paths(self, dto: GetAviableRoutesDTO) -> list[Path]:
+    def generate_pathes(self, dto: GetAviableRoutesDTO) -> list[Path]:
         try:
-            return self._service.generate_paths(dto)
+            return self._service.generate_pathes(dto)
         
         except Exception as error:
             self._logger.error(f"Error generating paths ({dto}), got error: {error.__class__.__name__}: {error}")
