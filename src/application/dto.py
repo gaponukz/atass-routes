@@ -68,3 +68,8 @@ class RoutePrototypeDTO:
 class AddRoutesDTO:
     route_prototype: RoutePrototypeDTO
     departure_dates: list[datetime.datetime]
+
+@dataclasses.dataclass
+class NotifyPassengerDTO:
+    payment_id: HashId
+    passenger: Passenger

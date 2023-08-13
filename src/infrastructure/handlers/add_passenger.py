@@ -5,14 +5,26 @@ import pika
 
 from src.domain.entities import Passenger
 from src.application.dto import AddPassengerDTO
+from src.application.dto import NotifyPassengerDTO
 from urllib.parse import urlparse
 
 class AddPassengerService(typing.Protocol):
     def add_passenger(self, data: AddPassengerDTO): ...
 
+class PassengerNotifier(typing.Protocol):
+    def notify(self, data: NotifyPassengerDTO): ...
+
 class RoutesEventsListener:
-    def __init__(self, service: AddPassengerService, url: str):
-        self.service = service
+    def __init__(
+            self,
+            add_passenger_service: AddPassengerService,
+            notify_passenger_service: PassengerNotifier,
+            url: str
+        ):
+        
+        self.add_passenger_service = add_passenger_service
+        self.notify_passenger_service = notify_passenger_service
+
         self.connection = pika.BlockingConnection(self._connection_from_url(url))
         self.channel = self.connection.channel()
         self.channel.queue_bind(exchange="payments_exchange", queue="route_payments")
@@ -38,16 +50,23 @@ class RoutesEventsListener:
         data = json.loads(message)
         passenger_json = data['passenger']
 
-        self.service.add_passenger(AddPassengerDTO(
-            route_id=data.get('routeId'),
-            passenger=Passenger(
-                full_name=passenger_json['fullName'],
-                phone_number=passenger_json['phoneNumber'],
-                moving_from_id=passenger_json['movingFromId'],
-                moving_towards_id=passenger_json['movingTowardsId'],
-                email_address=passenger_json['gmail'],
-                id=passenger_json['id']
-            )
+        passenger = Passenger(
+            full_name=passenger_json['fullName'],
+            phone_number=passenger_json['phoneNumber'],
+            moving_from_id=passenger_json['movingFromId'],
+            moving_towards_id=passenger_json['movingTowardsId'],
+            email_address=passenger_json['gmail'],
+            id=passenger_json['id']
+        )
+
+        self.add_passenger_service.add_passenger(AddPassengerDTO(
+            route_id=data['routeId'],
+            passenger=passenger
+        ))
+
+        self.notify_passenger_service.notify(NotifyPassengerDTO(
+            payment_id=data['paymentId'],
+            passenger=passenger
         ))
 
     def _callback(self, ch, method, properties, body):

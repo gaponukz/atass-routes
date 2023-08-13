@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from src.infrastructure.settings import settings
 from src.infrastructure.db.json_db import RouteRepository
 from src.infrastructure.logger.console import ConsoleLogger
+from src.infrastructure.notifier.gmail import GmailNotifier, Creds, Letter
 
 from src.application.usecases.view_routes import ViewRoutesUseCase
 from src.application.usecases.route_availability import RouteAvailabilityUseCase
@@ -24,10 +25,16 @@ from src.infrastructure.logger.decorators.delete_route import DeleteRouteLogger
 from src.infrastructure.logger.decorators.edit_route import EditRoutersLogger
 from src.infrastructure.logger.decorators.route_availability import AvailabilityServiceLogger
 from src.infrastructure.logger.decorators.view_routes import ViewServiceLogger
+from src.infrastructure.logger.decorators.notify_passenger import NotifyPassengerLogger
 
+logger = ConsoleLogger()
 db = RouteRepository("routes.json")
 config = settings.EnvSettingsExporter().load()
-logger = ConsoleLogger()
+gmail_notifier = NotifyPassengerLogger(GmailNotifier(
+    Creds(config.gmail, config.gmail_password),
+    Letter("Автобусний Квиток", "letters/new_route.html")
+), logger)
+
 
 view_usecase = ViewServiceLogger(ViewRoutesUseCase(db), logger)
 availability_usecase = AvailabilityServiceLogger(RouteAvailabilityUseCase(db), logger)
@@ -41,7 +48,7 @@ availability_handler = RouteAvailabilityHandler(availability_usecase)
 view_handler = ViewRoutesHandler(view_usecase)
 changeRoutesHandler = ChangeRoutesHandler(edit_routers_usecase, delete_route_usecase)
 
-event_listener = RoutesEventsListener(add_passenger_usecase, config.rabbitmq_url)
+event_listener = RoutesEventsListener(add_passenger_usecase, gmail_notifier, config.rabbitmq_url)
 
 app = FastAPI()
 app.add_middleware(
