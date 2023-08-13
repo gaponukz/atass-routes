@@ -2,7 +2,7 @@ import datetime
 from src.domain.entities import Route
 from src.domain.entities import Spot
 from src.domain.entities import Place
-from src.domain.entities import HashId
+from src.domain.value_objects import HashId
 from src.application.usecases.delete_route import DeleteRouteUseCase
 
 class DataBaseMock:

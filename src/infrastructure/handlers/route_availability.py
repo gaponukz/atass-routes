@@ -1,7 +1,7 @@
 import typing
 from fastapi import APIRouter
 from src.domain.entities import Path
-from src.domain.entities import DayDate
+from src.domain.value_objects import DayDate
 from src.application.dto import GetAviableRoutesDTO
 
 class AvailabilityService(typing.Protocol):

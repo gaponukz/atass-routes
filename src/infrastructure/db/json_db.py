@@ -1,5 +1,5 @@
 import json
-from src.domain.entities import HashId
+from src.domain.value_objects import HashId
 from src.domain.entities import Route
 from src.domain.errors import RouteNotFoundError
 

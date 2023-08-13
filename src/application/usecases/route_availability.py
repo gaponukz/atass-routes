@@ -5,7 +5,7 @@ from src.domain.entities import Route
 from src.domain.entities import Path
 from src.domain.entities import Spot
 from src.domain.entities import Passenger
-from src.domain.entities import HashId
+from src.domain.value_objects import HashId
 from src.application.dto import GetAviableRoutesDTO
 
 class ReadAbleDataBase(typing.Protocol):

@@ -1,9 +1,9 @@
 import datetime
 from src.domain.entities import Route
 from src.domain.entities import Place
-from src.domain.entities import SpotTemplate
-from src.domain.entities import StartSpotTemplate
-from src.domain.entities import RoutePrototype
+from src.application.dto import SpotTemplateDTO
+from src.application.dto import StartSpotTemplateDTO
+from src.application.dto import RoutePrototypeDTO
 from src.application.dto import AddRoutesDTO
 from src.application.usecases.add_routes import AddRoutesUseCase
 
@@ -16,9 +16,9 @@ class DataBaseMock:
 
 now_date = datetime.datetime.now()
 
-prototype = RoutePrototype(
+prototype = RoutePrototypeDTO(
     passengers_number=5,
-    move_from=StartSpotTemplate(
+    move_from=StartSpotTemplateDTO(
         id="start",
         place=Place(
             country="Ac",
@@ -26,7 +26,7 @@ prototype = RoutePrototype(
             street="As"
         ),
     ),
-    move_to=SpotTemplate(
+    move_to=SpotTemplateDTO(
         id="end",
         place=Place(
             country="Bc",
@@ -36,7 +36,7 @@ prototype = RoutePrototype(
         from_start=2000
     ),
     sub_spots=[
-        SpotTemplate(
+        SpotTemplateDTO(
             id="sub1",
             place=Place(
                 country="Cc",

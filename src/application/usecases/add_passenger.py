@@ -1,7 +1,5 @@
 import typing
-from src.domain.entities import HashId
 from src.domain.entities import Route
-from src.domain.entities import Passenger
 from src.application.dto import AddPassengerDTO
 from src.domain.errors import RouteNotFoundError
 from src.domain.errors import CannotKillPassengersError

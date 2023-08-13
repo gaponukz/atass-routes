@@ -1,6 +1,6 @@
 import typing
 from fastapi import APIRouter
-from src.domain.entities import HashId
+from src.domain.value_objects import HashId
 from src.application.dto import UpdateRoutesDTO
 
 class DeleteRouteService(typing.Protocol):
