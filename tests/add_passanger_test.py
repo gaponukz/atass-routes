@@ -72,7 +72,10 @@ class DataBaseMock:
                     "sub3": {
                         "end": 2
                     }
-                }
+                },
+                description={"ua": "Hi", "en": "Hi", "pl": "Hi"},
+                rules={"ua": "Hi", "en": "Hi", "pl": "Hi"},
+                transportation_rules={"ua": "Hi", "en": "Hi", "pl": "Hi"},
             )
         ]
 
@@ -89,6 +92,7 @@ def test_add_passenger():
     service = AddPassengerUseCase(db)
 
     passenger1 = Passenger(
+        id='1',
         full_name="Ada Nab",
         phone_number="123",
         moving_from_id="start",

@@ -2,9 +2,9 @@ import uuid
 import datetime
 import dataclasses
 
-from domain.value_objects import HashId
-from domain.value_objects import PricesSchema
-from domain.value_objects import MultiLanguages
+from src.domain.value_objects import HashId
+from src.domain.value_objects import PricesSchema
+from src.domain.value_objects import MultiLanguages
 
 @dataclasses.dataclass
 class Place:
@@ -48,3 +48,4 @@ class Path:
     move_from: Spot
     move_to: Spot
     price: float
+    root_route_id: HashId

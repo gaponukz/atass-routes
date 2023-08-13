@@ -35,6 +35,9 @@ prototype = RoutePrototypeDTO(
         ),
         from_start=2000
     ),
+    description={"ua": "Hi", "en": "Hi", "pl": "Hi"},
+    rules={"ua": "Hi", "en": "Hi", "pl": "Hi"},
+    transportation_rules={"ua": "Hi", "en": "Hi", "pl": "Hi"},
     sub_spots=[
         SpotTemplateDTO(
             id="sub1",

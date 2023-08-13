@@ -78,7 +78,10 @@ class DataBaseMock:
                     "sub3": {
                         "end": 2
                     }
-                }
+                },
+                description={"ua": "Hi", "en": "Hi", "pl": "Hi"},
+                rules={"ua": "Hi", "en": "Hi", "pl": "Hi"},
+                transportation_rules={"ua": "Hi", "en": "Hi", "pl": "Hi"},
             )
         ]
 
@@ -153,7 +156,10 @@ def test_update():
                     "sub3": {
                         "end": 0
                     }
-                }
+                },
+                description={"ua": "Hi", "en": "Hi", "pl": "Hi"},
+                rules={"ua": "Hi", "en": "Hi", "pl": "Hi"},
+                transportation_rules={"ua": "Hi", "en": "Hi", "pl": "Hi"},
             )
     ))
 

@@ -70,7 +70,10 @@ class DataBaseStub:
                     "sub3": {
                         "end": 2
                     }
-                }
+                },
+                description={"ua": "Hi", "en": "Hi", "pl": "Hi"},
+                rules={"ua": "Hi", "en": "Hi", "pl": "Hi"},
+                transportation_rules={"ua": "Hi", "en": "Hi", "pl": "Hi"},
             )
         ]
 

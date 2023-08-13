@@ -1,3 +1,4 @@
+import copy
 import typing
 from src.domain.entities import Route
 from src.domain.value_objects import HashId
@@ -70,7 +71,7 @@ class ViewRoutesUseCase:
 
     def _shorten_route(self, route: Route) -> ShortRouteDTO:
         return ShortRouteDTO(
-            move_from=route.move_from.place.copy(),
-            move_to=route.move_to.place.copy(),
+            move_from=copy.deepcopy(route.move_from.place),
+            move_to=copy.deepcopy(route.move_to.place),
             count=0
         )

@@ -1,53 +1,70 @@
 import datetime
-import pydantic
-from src.domain import entities
+import dataclasses
+from src.domain.entities import Route
+from src.domain.entities import Spot
+from src.domain.entities import Passenger
+from src.domain.entities import Place
 
-class GetAviableRoutesDTO(pydantic.BaseModel):
+from src.domain.value_objects import DayDate
+from src.domain.value_objects import HashId
+from src.domain.value_objects import MultiLanguages
+from src.domain.value_objects import PricesSchema
+
+@dataclasses.dataclass
+class GetAviableRoutesDTO:
     move_from_city: str
     move_to_city: str
-    date: entities.DayDate
+    date: DayDate
 
-class AddRoutesDTO(pydantic.BaseModel):
-    route_prototype: entities.RoutePrototype
-    departure_dates: list[datetime.datetime]
+@dataclasses.dataclass
+class UpdateRoutesDTO:
+    route: Route
 
-class UpdateRoutesDTO(pydantic.BaseModel):
-    route: entities.Route
+@dataclasses.dataclass
+class AddPassengerDTO:
+    route_id: HashId
+    passenger: Passenger
 
-class AddPassengerDTO(pydantic.BaseModel):
-    route_id: entities.HashId
-    passenger: entities.Passenger
+@dataclasses.dataclass
+class PathInfoDTO:
+    move_from: Spot
+    move_to: Spot
+    price: float
+    root_route_id: HashId
+    description: MultiLanguages
+    rules: MultiLanguages
+    transportation_rules: MultiLanguages
 
-class PathInfoDTO(pydantic.BaseModel):
-    move_from: entities.Spot
-    move_to: entities.Spot
-    price: int
-    root_route_id: entities.HashId
-    description: entities.MultiLanguages
-    rules: entities.MultiLanguages
-    transportation_rules: entities.MultiLanguages
-
-class ShortRouteDTO(pydantic.BaseModel):
-    move_from: entities.Place
-    move_to: entities.Place
+@dataclasses.dataclass
+class ShortRouteDTO:
+    move_from: Place
+    move_to: Place
     count: int
 
-class SpotTemplateDTO(pydantic.BaseModel):
-    place: entities.Place
+@dataclasses.dataclass
+class SpotTemplateDTO:
+    place: Place
     from_start: int
-    id: entities.HashId
+    id: HashId
 
-class StartSpotTemplateDTO(pydantic.BaseModel):
-    place: entities.Place
-    id: entities.HashId
+@dataclasses.dataclass
+class StartSpotTemplateDTO:
+    place: Place
+    id: HashId
 
-class RoutePrototypeDTO(pydantic.BaseModel):
+@dataclasses.dataclass
+class RoutePrototypeDTO:
     move_from: StartSpotTemplateDTO
     move_to: SpotTemplateDTO
     sub_spots: list[SpotTemplateDTO]
     passengers_number: int
-    description: entities.MultiLanguages
-    rules: entities.MultiLanguages
-    transportation_rules: entities.MultiLanguages
+    description: MultiLanguages
+    rules: MultiLanguages
+    transportation_rules: MultiLanguages
     is_active: bool = True
-    prices: entities.PricesSchema = {}
+    prices: PricesSchema = dataclasses.field(default_factory=dict)
+
+@dataclasses.dataclass
+class AddRoutesDTO:
+    route_prototype: RoutePrototypeDTO
+    departure_dates: list[datetime.datetime]

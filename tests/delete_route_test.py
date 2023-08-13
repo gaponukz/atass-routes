@@ -23,7 +23,10 @@ class DataBaseMock:
                 ),
                 sub_spots=[],
                 passengers=[],
-                prices={}
+                prices={},
+                description={"ua": "Hi", "en": "Hi", "pl": "Hi"},
+                rules={"ua": "Hi", "en": "Hi", "pl": "Hi"},
+                transportation_rules={"ua": "Hi", "en": "Hi", "pl": "Hi"},
             )
         ]
 

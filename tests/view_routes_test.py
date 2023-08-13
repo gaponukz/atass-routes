@@ -29,6 +29,8 @@ class DataBaseStub:
                     )
                 ],
                 description={"ua": "Hi", "en": "Hi", "pl": "Hi"},
+                rules={"ua": "Hi", "en": "Hi", "pl": "Hi"},
+                transportation_rules={"ua": "Hi", "en": "Hi", "pl": "Hi"},
                 prices={"11": {"12": 100}}
             ),
             Route(
@@ -41,7 +43,10 @@ class DataBaseStub:
                 move_to=Spot(
                     place=Place(country="Bc", city="Bc", street="Bs"),
                     date=datetime.datetime.now()
-                )
+                ),
+                description={"ua": "Hi", "en": "Hi", "pl": "Hi"},
+                rules={"ua": "Hi", "en": "Hi", "pl": "Hi"},
+                transportation_rules={"ua": "Hi", "en": "Hi", "pl": "Hi"},
             ),
             Route(
                 id="3",
@@ -53,7 +58,10 @@ class DataBaseStub:
                 move_to=Spot(
                     place=Place(country="Dc", city="Dc", street="Ds"),
                     date=datetime.datetime.now()
-                )
+                ),
+                description={"ua": "Hi", "en": "Hi", "pl": "Hi"},
+                rules={"ua": "Hi", "en": "Hi", "pl": "Hi"},
+                transportation_rules={"ua": "Hi", "en": "Hi", "pl": "Hi"},
             )
         ]
 
