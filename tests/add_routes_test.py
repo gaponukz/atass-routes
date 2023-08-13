@@ -1,11 +1,11 @@
 import datetime
-from src.business.entities import Route
-from src.business.entities import Place
-from src.business.entities import SpotTemplate
-from src.business.entities import StartSpotTemplate
-from src.business.entities import RoutePrototype
-from src.business.dto import AddRoutesDTO
-from src.usecases.add_routes import AddRoutesUseCase
+from src.domain.entities import Route
+from src.domain.entities import Place
+from src.application.dto import SpotTemplateDTO
+from src.application.dto import StartSpotTemplateDTO
+from src.application.dto import RoutePrototypeDTO
+from src.application.dto import AddRoutesDTO
+from src.application.usecases.add_routes import AddRoutesUseCase
 
 class DataBaseMock:
     def __init__(self) -> None:
@@ -16,9 +16,9 @@ class DataBaseMock:
 
 now_date = datetime.datetime.now()
 
-prototype = RoutePrototype(
+prototype = RoutePrototypeDTO(
     passengers_number=5,
-    move_from=StartSpotTemplate(
+    move_from=StartSpotTemplateDTO(
         id="start",
         place=Place(
             country="Ac",
@@ -26,7 +26,7 @@ prototype = RoutePrototype(
             street="As"
         ),
     ),
-    move_to=SpotTemplate(
+    move_to=SpotTemplateDTO(
         id="end",
         place=Place(
             country="Bc",
@@ -35,8 +35,11 @@ prototype = RoutePrototype(
         ),
         from_start=2000
     ),
+    description={"ua": "Hi", "en": "Hi", "pl": "Hi"},
+    rules={"ua": "Hi", "en": "Hi", "pl": "Hi"},
+    transportation_rules={"ua": "Hi", "en": "Hi", "pl": "Hi"},
     sub_spots=[
-        SpotTemplate(
+        SpotTemplateDTO(
             id="sub1",
             place=Place(
                 country="Cc",

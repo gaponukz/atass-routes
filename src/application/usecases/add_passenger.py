@@ -1,10 +1,8 @@
 import typing
-from src.business.entities import HashId
-from src.business.entities import Route
-from src.business.entities import Passenger
-from src.business.dto import AddPassengerDTO
-from src.business.errors import RouteNotFoundError
-from src.business.errors import CannotKillPassengersError
+from src.domain.entities import Route
+from src.application.dto import AddPassengerDTO
+from src.domain.errors import RouteNotFoundError
+from src.domain.errors import CannotKillPassengersError
 
 class Database(typing.Protocol):
     def read_all(self) -> list[Route]: ...

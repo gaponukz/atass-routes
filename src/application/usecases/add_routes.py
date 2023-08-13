@@ -1,11 +1,13 @@
+import copy
 import typing
 import datetime
 import uuid
-from src.business.entities import Route
-from src.business.entities import HashId
-from src.business.entities import PricesSchema
-from src.business.entities import RoutePrototype
-from src.business.dto import AddRoutesDTO
+from src.domain.entities import Route
+from src.domain.entities import Spot
+from src.domain.value_objects import HashId
+from src.domain.value_objects import PricesSchema
+from src.application.dto import RoutePrototypeDTO
+from src.application.dto import AddRoutesDTO
 
 class CreatAbleDatabase(typing.Protocol):
     def create(self, route: Route): ...
@@ -22,7 +24,7 @@ class AddRoutesUseCase:
         routes: list[Route] = []
 
         for departure_date in dto.departure_dates:
-            new_route = self._route_from_prototype(dto.route_prototype.copy(deep=True), departure_date)
+            new_route = self._route_from_prototype(copy.deepcopy(dto.route_prototype), departure_date)
 
             ids_replacements: dict[HashId, HashId] = {}
             new_prices: PricesSchema = {}
@@ -55,12 +57,29 @@ class AddRoutesUseCase:
 
         return routes
     
-    def _route_from_prototype(self, prototype: RoutePrototype, date: datetime.datetime) -> Route:
-        new_route = prototype.copy().dict()
-        new_route['move_from']['date'] = date
-        new_route['move_to']['date'] = date + datetime.timedelta(minutes=prototype.move_to.from_start)
+    def _route_from_prototype(self, prototype: RoutePrototypeDTO, date: datetime.datetime) -> Route:
+        new_route = Route(
+            passengers_number=prototype.passengers_number,
+            description=prototype.description,
+            rules=prototype.rules,
+            transportation_rules=prototype.transportation_rules,
+            move_from=Spot(
+                place=prototype.move_from.place,
+                id=prototype.move_from.id,
+                date=date
+            ),
+            move_to=Spot(
+                place=prototype.move_to.place,
+                id=prototype.move_to.id,
+                date=date + datetime.timedelta(minutes=prototype.move_to.from_start)
+            ),
+        )
 
         for i in range(len(prototype.sub_spots)):
-            new_route['sub_spots'][i]['date'] = date + datetime.timedelta(minutes=prototype.sub_spots[i].from_start)
+            new_route.sub_spots.append(Spot(
+                place=prototype.sub_spots[i].place,
+                id=prototype.sub_spots[i].id,
+                date=date + datetime.timedelta(minutes=prototype.sub_spots[i].from_start)
+            ))
         
-        return Route(**new_route)
+        return new_route

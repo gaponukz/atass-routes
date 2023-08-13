@@ -1,9 +1,9 @@
 import datetime
-from src.business.entities import Route
-from src.business.entities import Spot
-from src.business.entities import Place
-from src.business.errors import SpotNotFoundError
-from src.usecases.view_routes import ViewRoutesUseCase
+from src.domain.entities import Route
+from src.domain.entities import Spot
+from src.domain.entities import Place
+from src.domain.errors import SpotNotFoundError
+from src.application.usecases.view_routes import ViewRoutesUseCase
 
 class DataBaseStub:
     def read_all(self) -> list[Route]:
@@ -29,6 +29,8 @@ class DataBaseStub:
                     )
                 ],
                 description={"ua": "Hi", "en": "Hi", "pl": "Hi"},
+                rules={"ua": "Hi", "en": "Hi", "pl": "Hi"},
+                transportation_rules={"ua": "Hi", "en": "Hi", "pl": "Hi"},
                 prices={"11": {"12": 100}}
             ),
             Route(
@@ -41,7 +43,10 @@ class DataBaseStub:
                 move_to=Spot(
                     place=Place(country="Bc", city="Bc", street="Bs"),
                     date=datetime.datetime.now()
-                )
+                ),
+                description={"ua": "Hi", "en": "Hi", "pl": "Hi"},
+                rules={"ua": "Hi", "en": "Hi", "pl": "Hi"},
+                transportation_rules={"ua": "Hi", "en": "Hi", "pl": "Hi"},
             ),
             Route(
                 id="3",
@@ -53,7 +58,10 @@ class DataBaseStub:
                 move_to=Spot(
                     place=Place(country="Dc", city="Dc", street="Ds"),
                     date=datetime.datetime.now()
-                )
+                ),
+                description={"ua": "Hi", "en": "Hi", "pl": "Hi"},
+                rules={"ua": "Hi", "en": "Hi", "pl": "Hi"},
+                transportation_rules={"ua": "Hi", "en": "Hi", "pl": "Hi"},
             )
         ]
 

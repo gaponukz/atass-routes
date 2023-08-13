@@ -1,6 +1,6 @@
 import typing
-from src.logger._interface import ILogger
-from src.business.dto import AddPassengerDTO
+from src.infrastructure.logger._interface import ILogger
+from src.application.dto import AddPassengerDTO
 
 class AddPassengerService(typing.Protocol):
     def add_passenger(self, data: AddPassengerDTO): ...

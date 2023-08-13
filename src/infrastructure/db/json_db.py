@@ -1,11 +1,13 @@
 import json
-from src.business.entities import HashId
-from src.business.entities import Route
-from src.business.errors import RouteNotFoundError
+import dataclass_factory
+from src.domain.value_objects import HashId
+from src.domain.entities import Route
+from src.domain.errors import RouteNotFoundError
 
 class RouteRepository:
     def __init__(self, filename: str):
         self._filename = filename
+        self._factory = dataclass_factory.Factory()
 
     def _read_file(self) -> list[dict]:
         try:
@@ -26,19 +28,19 @@ class RouteRepository:
 
     def create(self, route: Route):
         data = self._read_file()
-        data.append(route.dict())
+        data.append(self._factory.dump(route) )
         self._write_file(data)
 
     def read_all(self) -> list[Route]:
         data = self._read_file()
-        return [Route(**route_data) for route_data in data]
+        return [self._factory.load(route_data, Route) for route_data in data]
 
     def update(self, route: Route):
         data = self._read_file()
 
         for idx, route_data in enumerate(data):
             if route_data['id'] == route.id:
-                data[idx] = route.dict()
+                data[idx] = self._factory.dump(route)
                 break
         else:
             raise RouteNotFoundError(route.id)

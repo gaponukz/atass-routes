@@ -1,10 +1,11 @@
+import copy
 import typing
-from src.business.entities import Route
-from src.business.entities import HashId
-from src.business.entities import ShortRoute
-from src.business.entities import PathInfo
-from src.business.errors import RouteNotFoundError
-from src.business.errors import SpotNotFoundError
+from src.domain.entities import Route
+from src.domain.value_objects import HashId
+from src.domain.errors import RouteNotFoundError
+from src.domain.errors import SpotNotFoundError
+from src.application.dto import ShortRouteDTO
+from src.application.dto import PathInfoDTO
 
 class ReadAbleDataBase(typing.Protocol):
     def read_all(self) -> list[Route]: ...
@@ -13,9 +14,9 @@ class ViewRoutesUseCase:
     def __init__(self, db: ReadAbleDataBase) -> None:
         self._db = db
     
-    def get_unique_routes(self) -> list[ShortRoute]:
+    def get_unique_routes(self) -> list[ShortRouteDTO]:
         routes = self._db.read_all()
-        unique: dict[str, ShortRoute] = {}
+        unique: dict[str, ShortRouteDTO] = {}
 
         for route in routes:
             key = f"{route.move_from.place.city}-{route.move_to.place.city}"
@@ -43,7 +44,7 @@ class ViewRoutesUseCase:
 
         return filtered[0]
 
-    def get_path_info(self, route_id: HashId, move_from: HashId, move_to: HashId) -> PathInfo:
+    def get_path_info(self, route_id: HashId, move_from: HashId, move_to: HashId) -> PathInfoDTO:
         route = self.get_route_by_id(route_id)
         routes_spots = route.sub_spots.copy()
         routes_spots.insert(0, route.move_from)
@@ -58,7 +59,7 @@ class ViewRoutesUseCase:
         if not to_spot:
             raise SpotNotFoundError(route_id, move_to)
         
-        return PathInfo(
+        return PathInfoDTO(
             move_from=from_spot[0],
             move_to=to_spot[0],
             price=route.prices[move_from][move_to],
@@ -68,9 +69,9 @@ class ViewRoutesUseCase:
             rules=route.rules
         )
 
-    def _shorten_route(self, route: Route) -> ShortRoute:
-        return ShortRoute(
-            move_from=route.move_from.place.copy(),
-            move_to=route.move_to.place.copy(),
+    def _shorten_route(self, route: Route) -> ShortRouteDTO:
+        return ShortRouteDTO(
+            move_from=copy.deepcopy(route.move_from.place),
+            move_to=copy.deepcopy(route.move_to.place),
             count=0
         )

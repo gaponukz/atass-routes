@@ -1,6 +1,6 @@
 import typing
-from src.logger._interface import ILogger
-from src.business.dto import UpdateRoutesDTO
+from src.infrastructure.logger._interface import ILogger
+from src.application.dto import UpdateRoutesDTO
 
 class EditRoutersService(typing.Protocol):
     def update(self, dto: UpdateRoutesDTO): ...

@@ -1,12 +1,12 @@
 import typing
 import datetime
 from collections import defaultdict
-from src.business.entities import Route
-from src.business.entities import Path
-from src.business.entities import Spot
-from src.business.entities import Passenger
-from src.business.entities import HashId
-from src.business.dto import GetAviableRoutesDTO
+from src.domain.entities import Route
+from src.domain.entities import Path
+from src.domain.entities import Spot
+from src.domain.entities import Passenger
+from src.domain.value_objects import HashId
+from src.application.dto import GetAviableRoutesDTO
 
 class ReadAbleDataBase(typing.Protocol):
     def read_all(self) -> list[Route]: ...

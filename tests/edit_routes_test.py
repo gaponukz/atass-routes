@@ -1,10 +1,10 @@
 import datetime
-from src.business.entities import Route
-from src.business.entities import Spot
-from src.business.entities import Place
-from src.business.entities import Passenger
-from src.business.dto import UpdateRoutesDTO
-from src.usecases.edit_routes import EditRoutersUseCase
+from src.domain.entities import Route
+from src.domain.entities import Spot
+from src.domain.entities import Place
+from src.domain.entities import Passenger
+from src.application.dto import UpdateRoutesDTO
+from src.application.usecases.edit_routes import EditRoutersUseCase
 
 class DataBaseMock:
     def __init__(self):
@@ -78,7 +78,10 @@ class DataBaseMock:
                     "sub3": {
                         "end": 2
                     }
-                }
+                },
+                description={"ua": "Hi", "en": "Hi", "pl": "Hi"},
+                rules={"ua": "Hi", "en": "Hi", "pl": "Hi"},
+                transportation_rules={"ua": "Hi", "en": "Hi", "pl": "Hi"},
             )
         ]
 
@@ -153,7 +156,10 @@ def test_update():
                     "sub3": {
                         "end": 0
                     }
-                }
+                },
+                description={"ua": "Hi", "en": "Hi", "pl": "Hi"},
+                rules={"ua": "Hi", "en": "Hi", "pl": "Hi"},
+                transportation_rules={"ua": "Hi", "en": "Hi", "pl": "Hi"},
             )
     ))
 
