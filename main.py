@@ -21,7 +21,7 @@ from src.infrastructure.handlers.add_passenger import RoutesEventsListener
 from src.infrastructure.logger.decorators.add_passenger import AddPassengerLogger
 from src.infrastructure.logger.decorators.add_routes import AddRoutesLogger
 from src.infrastructure.logger.decorators.delete_route import DeleteRouteLogger
-from src.infrastructure.logger.decorators.edit_route import EditRouteLogger
+from src.infrastructure.logger.decorators.edit_route import EditRoutersLogger
 from src.infrastructure.logger.decorators.route_availability import AvailabilityServiceLogger
 from src.infrastructure.logger.decorators.view_routes import ViewServiceLogger
 
@@ -32,7 +32,7 @@ logger = ConsoleLogger()
 view_usecase = ViewServiceLogger(ViewRoutesUseCase(db), logger)
 availability_usecase = AvailabilityServiceLogger(RouteAvailabilityUseCase(db), logger)
 add_routes_usecase = AddRoutesLogger(AddRoutesUseCase(db), logger)
-edit_routers_usecase = EditRouteLogger(EditRoutersUseCase(db), logger)
+edit_routers_usecase = EditRoutersLogger(EditRoutersUseCase(db), logger)
 delete_route_usecase = DeleteRouteLogger(DeleteRouteUseCase(db), logger)
 add_passenger_usecase = AddPassengerLogger(AddPassengerUseCase(db), logger)
 
