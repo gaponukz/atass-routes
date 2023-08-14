@@ -25,12 +25,41 @@ jobs:
       run: mypy src tests --explicit-package-bases --ignore-missing-imports
 
     - name: Run pytest
-      run: python -m pytest
+      run: python -m pytest tests/unit
 
+  e2e:
+    name: Run end-to-end tests
+    runs-on: ubuntu-latest
+    needs: [test]
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+
+    - name: Start containers
+      id: start-containers
+      run: |
+        docker-compose -f "docker-compose-test.yml" up -d --build
+        sleep 5
+        docker-compose -f "docker-compose-test.yml" logs
+
+    - name: Install Python and pytest
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+    - name: Install dependencies
+      run: pip install -r tests/e2e/requirements.txt
+    - name: Run end-to-end tests
+      run: python -m pytest tests/e2e
+      if: steps.start-containers.outcome == 'success'
+
+    - name: Stop containers
+      if: always()
+      run: docker-compose -f "docker-compose-test.yml" down
+  
   docker:
     name: Publishes to Docker Hub
     runs-on: ubuntu-latest
-    needs: [test]
+    needs: [e2e]
     if: github.ref == 'refs/heads/main'
     steps:
       - name: Checkout code

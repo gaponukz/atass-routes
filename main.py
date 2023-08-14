@@ -48,7 +48,11 @@ availability_handler = RouteAvailabilityHandler(availability_usecase)
 view_handler = ViewRoutesHandler(view_usecase)
 changeRoutesHandler = ChangeRoutesHandler(edit_routers_usecase, delete_route_usecase)
 
-event_listener = RoutesEventsListener(add_passenger_usecase, gmail_notifier, config.rabbitmq_url)
+try:
+    RoutesEventsListener(add_passenger_usecase, gmail_notifier, config.rabbitmq_url).listen()
+
+except Exception as error:
+    print("RoutesEventsListener not started")
 
 app = FastAPI()
 app.add_middleware(
@@ -62,5 +66,3 @@ app.include_router(view_handler.router)
 app.include_router(availability_handler.router)
 app.include_router(add_routes_handler.router)
 app.include_router(changeRoutesHandler.router)
-
-event_listener.listen()
