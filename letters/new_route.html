@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Автобусний Квиток</title>
+  <title>Купівлі Автобусного Квитка</title>
   <meta charset="utf-8">
   <style>
     body {
@@ -12,14 +12,30 @@
       padding: 0;
     }
 
+    .navbar {
+      background-color: #40ABCF;
+      color: #fff;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .navbar h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+
     .container {
       max-width: 400px;
       margin: 20px auto;
       padding: 20px;
-      background-color: #ffffff;
+      background-color: #fff;
       border-radius: 5px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       text-align: center;
+    }
+
+    .logo {
+      margin-bottom: 20px;
     }
 
     .title {
@@ -32,24 +48,37 @@
       font-size: 16px;
       margin-bottom: 20px;
       color: #666;
-      text-align: left;
+      text-align: left; /* Align left */
     }
 
-    .highlight {
+    .code {
+      font-size: 32px;
       font-weight: bold;
+      margin-bottom: 20px;
+      color: #40ABCF;
+      text-align: center; /* Align center */
+    }
+
+    .link {
       color: #40ABCF;
     }
   </style>
 </head>
 <body>
+  <div class="navbar">
+    <h1>Atass</h1>
+  </div>
   <div class="container">
-    <h1 class="title">Підтвердження Купівлі Автобусного Квитка</h1>
-    <p class="message">Шановний(а) PASSENGER_FULL_NAME,</p>
-    <p class="message">Дякуємо, що обрали Atass для своїх подорожей.</p>
-    <p class="message">Ваш платіж з ID <span class="highlight">PAYMENT_ID</span> був успішно оброблений.</p>
-    <p class="message">Деталі вашого бронювання наступні:</p>
-    <p class="message">Бажаємо вам приємної та безпечної подорожі!</p>
-    <p class="message">Якщо у вас є питання, не соромтеся звернутися до нашої підтримки.</p>
+    <h1 class="title">Купівлі Автобусного Квитка</h1>
+    <p class="message">
+      Шановний(а) PASSENGER_FULL_NAME, дякуємо, що обрали Atass для своїх подорожей!
+    </p>
+    <p class="code">PAYMENT_ID</p>
+    <p class="message">Ваша автобусна пригода чекає!</p>
+    <p class="message">
+      Бажаємо вам приємної та безпечної подорожі! <br>
+      Якщо у вас є питання, не соромтеся звернутися до нашої підтримки.
+    </p>
   </div>
 </body>
 </html>
