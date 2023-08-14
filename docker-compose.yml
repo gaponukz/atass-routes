@@ -18,6 +18,7 @@ services:
 
   routes_app:
     build:
+      context: .
       dockerfile: Dockerfile
     depends_on:
       rabbitmq:
