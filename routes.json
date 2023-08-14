@@ -1,0 +1,67 @@
+[
+    {
+        "passengers_number": 5,
+        "description": {
+            "ua": "\u0410\u0432\u0442\u043e\u0431\u0443\u0441\u043d\u0438\u0439 \u043c\u0430\u0440\u0448\u0440\u0443\u0442 \u0437 \u041a\u0438\u0454\u0432\u0430 \u0434\u043e \u0412\u0430\u0440\u0448\u0430\u0432\u0438.",
+            "en": "Bus route from Kiev to Warsaw.",
+            "pl": "Trasa autobusu z Kijowa do Warszawy."
+        },
+        "rules": {
+            "ua": "1. \u0417\u0430\u0431\u043e\u0440\u043e\u043d\u0435\u043d\u043e \u043a\u0443\u0440\u0438\u0442\u0438 \u0432 \u0430\u0432\u0442\u043e\u0431\u0443\u0441\u0456. 2. \u0417\u0430\u0431\u043e\u0440\u043e\u043d\u0435\u043d\u043e \u043f\u0435\u0440\u0435\u0432\u043e\u0437\u0438\u0442\u0438 \u043d\u0435\u0431\u0435\u0437\u043f\u0435\u0447\u043d\u0456 \u0440\u0435\u0447\u043e\u0432\u0438\u043d\u0438. 3. \u0417\u0430\u0431\u043e\u0440\u043e\u043d\u0435\u043d\u043e \u0432\u0438\u043d\u043e\u0441\u0438\u0442\u0438 \u0441\u043c\u0456\u0442\u0442\u044f \u0437 \u0430\u0432\u0442\u043e\u0431\u0443\u0441\u0430.",
+            "en": "1. No smoking on the bus. 2. No transport of dangerous substances. 3. No littering on the bus.",
+            "pl": "1. Zakaz palenia w autobusie. 2. Zakaz przewo\u017cenia substancji niebezpiecznych. 3. Zakaz zanieczyszczania autobusu."
+        },
+        "transportation_rules": {
+            "ua": "1. \u0417\u0430\u0431\u043e\u0440\u043e\u043d\u0435\u043d\u043e \u043f\u0435\u0440\u0435\u0432\u043e\u0437\u0438\u0442\u0438 \u0442\u0432\u0430\u0440\u0438\u043d. 2. \u0414\u043e\u0442\u0440\u0438\u043c\u0443\u0439\u0442\u0435\u0441\u044c \u0440\u043e\u0437\u043a\u043b\u0430\u0434\u0443 \u0440\u0443\u0445\u0443 \u0430\u0432\u0442\u043e\u0431\u0443\u0441\u0430. 3. \u041f\u0440\u0438\u0431\u0443\u0432\u0430\u0439\u0442\u0435 \u043d\u0430 \u0437\u0443\u043f\u0438\u043d\u043a\u0443 \u0437\u0430\u0437\u0434\u0430\u043b\u0435\u0433\u0456\u0434\u044c.",
+            "en": "1. No transportation of animals. 2. Follow the bus schedule. 3. Arrive at the bus stop in advance.",
+            "pl": "1. Zakaz przewo\u017cenia zwierz\u0105t. 2. Przestrzegaj rozk\u0142adu jazdy autobusu. 3. Przybywaj na przystanek z wyprzedzeniem."
+        },
+        "move_from": {
+            "place": {
+                "country": "\u0423\u043a\u0440\u0430\u0457\u043d\u0430",
+                "city": "\u041a\u0438\u0457\u0432",
+                "street": "\u0428\u0435\u0432\u0447\u043d\u043a\u0430 41",
+                "map_url": "https://goo.gl/maps/dL65kdr5ivLWMwvq6"
+            },
+            "date": "2024-08-15T09:00:00",
+            "is_active": true,
+            "id": "c279d1f3-ddb9-4091-8408-d88bdcc0a040"
+        },
+        "move_to": {
+            "place": {
+                "country": "\u041f\u043e\u043b\u044c\u0449\u0430",
+                "city": "\u0412\u0430\u0440\u0448\u0430\u0432\u0430",
+                "street": "\u0416\u0438\u0442\u043b\u043e\u0432\u0438\u0439 Targ\u00f3wek",
+                "map_url": "https://goo.gl/maps/pJkRodQZbDwzNVhA7"
+            },
+            "date": "2024-08-17T04:30:00",
+            "is_active": true,
+            "id": "b0907d2d-1131-49a1-a823-2fc8985cb3bb"
+        },
+        "is_active": true,
+        "prices": {
+            "c279d1f3-ddb9-4091-8408-d88bdcc0a040": {
+                "dbca1b8a-0c26-48db-8497-ad103e0fd78c": 500,
+                "b0907d2d-1131-49a1-a823-2fc8985cb3bb": 1000
+            },
+            "dbca1b8a-0c26-48db-8497-ad103e0fd78c": {
+                "b0907d2d-1131-49a1-a823-2fc8985cb3bb": 500
+            }
+        },
+        "sub_spots": [
+            {
+                "place": {
+                    "country": "\u0423\u043a\u0440\u0430\u0457\u043d\u0430",
+                    "city": "\u041b\u044c\u0432\u0456\u0432",
+                    "street": "\u0421\u0442\u0440\u0438\u0439\u0441\u044c\u043a\u0430",
+                    "map_url": "https://goo.gl/maps/19AYzzAF3V8aaigg8"
+                },
+                "date": "2024-08-16T23:00:00",
+                "is_active": true,
+                "id": "dbca1b8a-0c26-48db-8497-ad103e0fd78c"
+            }
+        ],
+        "passengers": [],
+        "id": "7c47bcb9-8179-49b5-93fd-089fafa793d3"
+    }
+]
