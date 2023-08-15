@@ -245,77 +245,71 @@
 
 ### Add new routes from prototype
 
-- URL: `/get_route_by_id?route_id={id}`
+- URL: `/add_routes`
 - Method: `POST`
 - Description: Create some routes from prototype
 - Request example:
 ```json
 {
-  "dto" : {
-    "route_prototype": {
-      "move_from": {
-        "place": {
+  "route_prototype": {
+  "move_from": {
+          "place": {
           "country": "StartCountry",
           "city": "StartCity",
           "street": "StartStreet"
-        },
-        "id": "start_hash_id_value"
       },
-      "move_to": {
-        "place": {
+      "id": "move_from_id"
+  },
+  "move_to": {
+      "place": {
           "country": "DestinationCountry",
           "city": "DestinationCity",
           "street": "DestinationStreet"
-        },
-        "from_start": 5,
-        "id": "destination_hash_id_value"
       },
-      "sub_spots": [
-        {
-          "place": {
-            "country": "SubSpotCountry1",
-            "city": "SubSpotCity1",
-            "street": "SubSpotStreet1"
-          },
-          "from_start": 2,
-          "id": "sub_spot1_hash_id_value"
-        },
-        {
-          "place": {
-            "country": "SubSpotCountry2",
-            "city": "SubSpotCity2",
-            "street": "SubSpotStreet2"
-          },
-          "from_start": 8,
-          "id": "sub_spot2_hash_id_value"
-        }
-      ],
-      "passengers_number": 3,
-      "description": {
-        "ua": "Опис на українській",
-        "en": "Description in English",
-        "pl": "Opis po polsku"
+      "from_start": 5,
+      "id": "move_to_id"
+  },
+  "sub_spots": [
+      {
+      "place": {
+          "country": "SubSpotCountry1",
+          "city": "SubSpotCity1",
+          "street": "SubSpotStreet1"
       },
-      "rules": {
-        "ua": "Правила на українській",
-        "en": "Rules in English",
-        "pl": "Zasady po polsku"
+      "from_start": 2,
+      "id": "first_spot_id"
       },
-      "transportation_rules": {
-        "ua": "Правила транспорту на українській",
-        "en": "Transportation rules in English",
-        "pl": "Zasady transportu po polsku"
+  ],
+  "passengers_number": 3,
+  "description": {
+      "ua": "Опис на українській",
+      "en": "Description in English",
+      "pl": "Opis po polsku"
+  },
+  "rules": {
+      "ua": "Правила на українській",
+      "en": "Rules in English",
+      "pl": "Zasady po polsku"
+  },
+  "transportation_rules": {
+      "ua": "Правила транспорту на українській",
+      "en": "Transportation rules in English",
+      "pl": "Zasady transportu po polsku"
+  },
+  "is_active": true,
+  "prices": {
+      "move_from_id": {
+          "first_spot_id": 500,
+          "move_to_id": 1000
       },
-      "is_active": true,
-      "prices": {
-        "property1": 10,
-        "property2": 20
+      "first_spot_id": {
+          "move_to_id": 500
       }
-    },
-    "departure_dates": [
-      "2023-08-14T12:00:00",
-      "2023-08-15T13:30:00"
-    ]
   }
+  },
+  "departure_dates": [
+      "2024-08-14T12:00:00",
+      "2024-08-15T13:30:00"
+  ]
 }
 ```

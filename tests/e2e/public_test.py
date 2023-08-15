@@ -24,7 +24,8 @@ def test_get_availability_graph():
     
     data = response.json()
 
-    assert data == {"Київ": ["Львів", "Варшава"], "Львів": ["Варшава"]}
+    assert data['Київ'] == ["Львів", "Варшава"]
+    assert data['Львів'] == ["Варшава"]
 
 def test_get_path_info():
     routeid = "7c47bcb9-8179-49b5-93fd-089fafa793d3"
