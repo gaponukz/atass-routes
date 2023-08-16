@@ -1,7 +1,7 @@
 import json
 import typing
-import threading
 import pika
+import multiprocessing
 
 from src.domain.entities import Passenger
 from src.domain.events import PaymentProcessed
@@ -74,7 +74,7 @@ class RoutesEventsListener:
         self.process_message(body)
         
     def listen(self):
-        threading.Thread(target=self._listen).start()
+        multiprocessing.Process(target=self._listen).start()
 
     def _listen(self):
         self.channel.basic_consume(queue="route_payments", on_message_callback=self._callback, auto_ack=True)
