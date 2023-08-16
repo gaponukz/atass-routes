@@ -56,7 +56,8 @@ class RoutesEventsListener:
             moving_from_id=passenger_json['movingFromId'],
             moving_towards_id=passenger_json['movingTowardsId'],
             email_address=passenger_json['gmail'],
-            id=passenger_json['id']
+            id=passenger_json['id'],
+            is_anonymous=passenger_json.get('isAnonymous', False),
         )
 
         self.add_passenger_service.add_passenger(PaymentProcessed(
