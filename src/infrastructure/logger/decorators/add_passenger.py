@@ -1,20 +1,20 @@
 import typing
 from src.infrastructure.logger._interface import ILogger
-from src.application.dto import AddPassengerDTO
+from src.domain.events import PaymentProcessed
 
 class AddPassengerService(typing.Protocol):
-    def add_passenger(self, data: AddPassengerDTO): ...
+    def add_passenger(self, event: PaymentProcessed): ...
 
 class AddPassengerLogger:
     def __init__(self, service: AddPassengerService, logger: ILogger):
         self._service = service
         self._logger = logger
 
-    def add_passenger(self, data: AddPassengerDTO):
+    def add_passenger(self, event: PaymentProcessed):
         try:
-            self._service.add_passenger(data)
-            self._logger.info(f"Passenger added: {data}")
+            self._service.add_passenger(event)
+            self._logger.info(f"Passenger added: {event}")
         
         except Exception as error:
-            self._logger.error(f"Error adding passenger ({data}), got error: {error.__class__.__name__}: {error}")
+            self._logger.error(f"Error adding passenger ({event}), got error: {error.__class__.__name__}: {error}")
             raise error

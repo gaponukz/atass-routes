@@ -1,3 +1,4 @@
+import typing
 import datetime
 import dataclasses
 from src.domain.entities import Route
@@ -19,11 +20,6 @@ class GetAviableRoutesDTO:
 @dataclasses.dataclass
 class UpdateRoutesDTO:
     route: Route
-
-@dataclasses.dataclass
-class AddPassengerDTO:
-    route_id: HashId
-    passenger: Passenger
 
 @dataclasses.dataclass
 class PathInfoDTO:

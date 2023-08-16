@@ -28,6 +28,7 @@ class Passenger:
     moving_towards_id: HashId
     email_address: str
     id: HashId
+    is_anonymous: bool = True
 
 @dataclasses.dataclass
 class Route:
