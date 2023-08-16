@@ -28,7 +28,7 @@ class RouteRepository:
 
     def create(self, route: Route):
         data = self._read_file()
-        data.append(self._factory.dump(route) )
+        data.append(self._factory.dump(route))
         self._write_file(data)
 
     def read_all(self) -> list[Route]:

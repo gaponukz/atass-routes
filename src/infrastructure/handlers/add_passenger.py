@@ -4,12 +4,12 @@ import threading
 import pika
 
 from src.domain.entities import Passenger
-from src.application.dto import AddPassengerDTO
+from src.domain.events import PaymentProcessed
 from src.application.dto import NotifyPassengerDTO
 from urllib.parse import urlparse
 
 class AddPassengerService(typing.Protocol):
-    def add_passenger(self, data: AddPassengerDTO): ...
+    def add_passenger(self, event: PaymentProcessed): ...
 
 class PassengerNotifier(typing.Protocol):
     def notify(self, data: NotifyPassengerDTO): ...
@@ -59,7 +59,7 @@ class RoutesEventsListener:
             id=passenger_json['id']
         )
 
-        self.add_passenger_service.add_passenger(AddPassengerDTO(
+        self.add_passenger_service.add_passenger(PaymentProcessed(
             route_id=data['routeId'],
             passenger=passenger
         ))

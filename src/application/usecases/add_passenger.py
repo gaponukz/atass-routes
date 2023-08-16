@@ -1,6 +1,6 @@
 import typing
 from src.domain.entities import Route
-from src.application.dto import AddPassengerDTO
+from src.domain.events import PaymentProcessed
 from src.domain.errors import RouteNotFoundError
 from src.domain.errors import CannotKillPassengersError
 
@@ -13,14 +13,14 @@ class AddPassengerUseCase:
     def __init__(self, db: Database):
         self._db = db
     
-    def add_passenger(self, data: AddPassengerDTO):
-        routes = list(filter(lambda r: r.id == data.route_id, self._db.read_all()))
+    def add_passenger(self, event: PaymentProcessed):
+        routes = list(filter(lambda r: r.id == event.route_id, self._db.read_all()))
 
         if not routes:
-            raise RouteNotFoundError(data.route_id)
+            raise RouteNotFoundError(event.route_id)
         
         route = routes[0]
-        route.passengers.append(data.passenger)
+        route.passengers.append(event.passenger)
 
         if len(route.passengers) > route.passengers_number:
             raise CannotKillPassengersError(route.passengers_number)
