@@ -14,6 +14,7 @@ from src.application.usecases.edit_routes import EditRoutersUseCase
 from src.application.usecases.delete_route import DeleteRouteUseCase
 from src.application.usecases.add_passenger import AddPassengerUseCase
 from src.application.decorators.on_add_passenger import SendEventOnPassengerAddedDecorator
+from src.application.decorators.on_remove_route import SendEventOnDeleteRouteDecorator
 
 from src.infrastructure.handlers.change_routes import ChangeRoutesHandler
 from src.infrastructure.handlers.add_routes import AddRoutesHandler
