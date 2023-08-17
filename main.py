@@ -14,8 +14,10 @@ from src.application.usecases.edit_routes import EditRoutersUseCase
 from src.application.usecases.delete_route import DeleteRouteUseCase
 from src.application.usecases.add_passenger import AddPassengerUseCase
 from src.application.decorators.on_add_passenger import SendEventOnPassengerAddedDecorator
+from src.application.decorators.on_remove_route import SendEventOnDeleteRouteDecorator
 
-from src.infrastructure.handlers.change_routes import ChangeRoutesHandler
+from src.infrastructure.handlers.update_route import UpdateRouteHandler
+from src.infrastructure.handlers.remove_route import RemoveRouteHandler
 from src.infrastructure.handlers.add_routes import AddRoutesHandler
 from src.infrastructure.handlers.route_availability import RouteAvailabilityHandler
 from src.infrastructure.handlers.view_routes import ViewRoutesHandler
@@ -32,6 +34,7 @@ from src.infrastructure.logger.decorators.notify_passenger import NotifyPassenge
 logger = ConsoleLogger()
 db = RouteRepository("routes.json")
 config = settings.EnvSettingsExporter().load()
+event_notifier = RabbitMQEventNotifier(config.rabbitmq_url)
 gmail_notifier = NotifyPassengerLogger(GmailNotifier(
     Creds(config.gmail, config.gmail_password),
     Letter("Автобусний Квиток", "letters/new_route.html")
@@ -42,13 +45,14 @@ view_usecase = ViewServiceLogger(ViewRoutesUseCase(db), logger)
 availability_usecase = AvailabilityServiceLogger(RouteAvailabilityUseCase(db), logger)
 add_routes_usecase = AddRoutesLogger(AddRoutesUseCase(db), logger)
 edit_routers_usecase = EditRoutersLogger(EditRoutersUseCase(db), logger)
-delete_route_usecase = DeleteRouteLogger(DeleteRouteUseCase(db), logger)
-add_passenger_usecase = AddPassengerLogger(SendEventOnPassengerAddedDecorator(AddPassengerUseCase(db), RabbitMQEventNotifier(config.rabbitmq_url)), logger)
+delete_route_usecase = DeleteRouteLogger(SendEventOnDeleteRouteDecorator(DeleteRouteUseCase(db), event_notifier, db), logger)
+add_passenger_usecase = AddPassengerLogger(SendEventOnPassengerAddedDecorator(AddPassengerUseCase(db), event_notifier), logger)
 
 add_routes_handler = AddRoutesHandler(add_routes_usecase)
 availability_handler = RouteAvailabilityHandler(availability_usecase)
 view_handler = ViewRoutesHandler(view_usecase)
-changeRoutesHandler = ChangeRoutesHandler(edit_routers_usecase, delete_route_usecase)
+update_handler = UpdateRouteHandler(edit_routers_usecase)
+delete_handler = RemoveRouteHandler(delete_route_usecase)
 
 try:
     RoutesEventsListener(add_passenger_usecase, gmail_notifier, config.rabbitmq_url).listen()
@@ -67,4 +71,5 @@ app.add_middleware(
 app.include_router(view_handler.router)
 app.include_router(availability_handler.router)
 app.include_router(add_routes_handler.router)
-app.include_router(changeRoutesHandler.router)
+app.include_router(update_handler.router)
+app.include_router(delete_handler.router)
