@@ -1,6 +1,5 @@
 import typing
 from src.domain.entities import Route
-from src.domain.entities import Spot
 from src.domain.value_objects import HashId
 from src.domain.events import PassengerPlaceEvent
 from src.domain.errors import RouteNotFoundError
