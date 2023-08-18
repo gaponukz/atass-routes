@@ -12,7 +12,7 @@ class UpdateRouteHandler:
         self._update_service = update_service
         self.router = APIRouter()
 
-        self.router.add_api_route("/route", self.update, methods=["UPDATE"])
+        self.router.add_api_route("/route", self.update, methods=["PUT"])
 
     def update(self, dto: UpdateRoutesDTO):
         self._update_service.update(dto)
