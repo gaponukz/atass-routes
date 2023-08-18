@@ -31,9 +31,6 @@ class SendEventOnDeleteRouteDecorator:
         try:
             route = routes[0]
 
-            if not self._is_actual_route(route):
-                return
-            
             for passenger in route.passengers:
                 self._sender.publish_event(PassengerPlaceEvent(
                     type='removed',
@@ -45,9 +42,3 @@ class SendEventOnDeleteRouteDecorator:
         
         finally:
             self._base.delete(route_id)
-
-    def _is_actual_spot(self, spot: Spot) -> bool:
-        return spot.date > datetime.datetime.now()
-
-    def _is_actual_route(self, route: Route) -> bool:
-        return self._is_actual_spot(route.move_to if not route.sub_spots else route.sub_spots[-1])
