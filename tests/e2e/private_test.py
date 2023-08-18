@@ -130,7 +130,7 @@ def test_add_delete_routes():
     assert route['prices'][route['move_from']['id']][route['sub_spots'][0]['id']] == 500
     assert route['prices'][route['sub_spots'][0]['id']][route['move_to']['id']] == 500
 
-    url = f"{BASE_URL}/routes?route_id={route['id']}"
+    url = f"{BASE_URL}/route?route_id={route['id']}"
     response = requests.delete(url)
 
     assert response.status_code == 200
@@ -139,3 +139,28 @@ def test_add_delete_routes():
     response = requests.get(url)
     
     assert response.status_code == 404
+
+def test_update_route():
+    url = f"{BASE_URL}/get_route_by_id?route_id=7c47bcb9-8179-49b5-93fd-089fafa793d3"
+    response = requests.get(url)
+    
+    data = response.json()
+    data['passengers_number'] = 20
+
+    url = f"{BASE_URL}/route?route_id=7c47bcb9-8179-49b5-93fd-089fafa793d3"
+    response = requests.put(url, json={'route': data})
+    assert response.status_code == 200
+
+    url = f"{BASE_URL}/get_route_by_id?route_id=7c47bcb9-8179-49b5-93fd-089fafa793d3"
+    response = requests.get(url)
+    
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert data['passengers_number'] == 20
+    
+    data['passengers_number'] = 5
+    url = f"{BASE_URL}/route?route_id=7c47bcb9-8179-49b5-93fd-089fafa793d3"
+    response = requests.put(url, json={'route': data})
+    assert response.status_code == 200
