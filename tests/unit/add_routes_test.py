@@ -2,7 +2,7 @@ import datetime
 from src.domain.entities import Route
 from src.domain.entities import Place
 from src.application.dto import SpotTemplateDTO
-from src.application.dto import StartSpotTemplateDTO
+from src.application.dto import SubSpotTemplateDTO
 from src.application.dto import RoutePrototypeDTO
 from src.application.dto import AddRoutesDTO
 from src.application.usecases.add_routes import AddRoutesUseCase
@@ -18,7 +18,7 @@ now_date = datetime.datetime.now()
 
 prototype = RoutePrototypeDTO(
     passengers_number=5,
-    move_from=StartSpotTemplateDTO(
+    move_from=SpotTemplateDTO(
         id="start",
         place=Place(
             country="Ac",
@@ -32,14 +32,13 @@ prototype = RoutePrototypeDTO(
             country="Bc",
             city="Bc",
             street="Bs"
-        ),
-        from_start=2000
+        )
     ),
     description={"ua": "Hi", "en": "Hi", "pl": "Hi"},
     rules={"ua": "Hi", "en": "Hi", "pl": "Hi"},
     transportation_rules={"ua": "Hi", "en": "Hi", "pl": "Hi"},
     sub_spots=[
-        SpotTemplateDTO(
+        SubSpotTemplateDTO(
             id="sub1",
             place=Place(
                 country="Cc",
@@ -65,8 +64,8 @@ def create_routes_from_prototype_test():
     service = AddRoutesUseCase(db)
 
     service.create_routes_from_prototype(AddRoutesDTO(route_prototype=prototype, departure_dates=[
-        now_date + datetime.timedelta(days=1, hours=4),
-        now_date + datetime.timedelta(days=2)
+        (now_date + datetime.timedelta(days=1, hours=4), now_date + datetime.timedelta(days=2, hours=4)),
+        (now_date + datetime.timedelta(days=2), now_date + datetime.timedelta(days=3))
     ]))
     
     assert len(db.routes) == 2
@@ -77,6 +76,6 @@ def create_routes_from_prototype_test():
 
         assert route.prices[route.move_from.id][route.move_to.id] == 10
         assert route.move_to.date in [
-            now_date + datetime.timedelta(days=1, hours=4, minutes=2000),
-            now_date + datetime.timedelta(days=2, minutes=2000)
+            now_date + datetime.timedelta(days=2, hours=4),
+            now_date + datetime.timedelta(days=3)
             ]
