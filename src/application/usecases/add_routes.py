@@ -57,7 +57,7 @@ class AddRoutesUseCase:
 
         return routes
     
-    def _route_from_prototype(self, prototype: RoutePrototypeDTO, date: datetime.datetime) -> Route:
+    def _route_from_prototype(self, prototype: RoutePrototypeDTO, dates: tuple[datetime.datetime, datetime.datetime]) -> Route:
         new_route = Route(
             passengers_number=prototype.passengers_number,
             description=prototype.description,
@@ -66,12 +66,12 @@ class AddRoutesUseCase:
             move_from=Spot(
                 place=prototype.move_from.place,
                 id=prototype.move_from.id,
-                date=date
+                date=dates[0]
             ),
             move_to=Spot(
                 place=prototype.move_to.place,
                 id=prototype.move_to.id,
-                date=date + datetime.timedelta(minutes=prototype.move_to.from_start)
+                date=dates[1]
             ),
         )
 
@@ -79,7 +79,7 @@ class AddRoutesUseCase:
             new_route.sub_spots.append(Spot(
                 place=prototype.sub_spots[i].place,
                 id=prototype.sub_spots[i].id,
-                date=date + datetime.timedelta(minutes=prototype.sub_spots[i].from_start)
+                date=dates[0] + datetime.timedelta(minutes=prototype.sub_spots[i].from_start)
             ))
         
         return new_route

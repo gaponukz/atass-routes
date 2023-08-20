@@ -1,4 +1,3 @@
-import typing
 import datetime
 import dataclasses
 from src.domain.entities import Route
@@ -38,21 +37,21 @@ class ShortRouteDTO:
     count: int
 
 @dataclasses.dataclass
-class SpotTemplateDTO:
+class SubSpotTemplateDTO:
     place: Place
     from_start: int
     id: HashId
 
 @dataclasses.dataclass
-class StartSpotTemplateDTO:
+class SpotTemplateDTO:
     place: Place
     id: HashId
 
 @dataclasses.dataclass
 class RoutePrototypeDTO:
-    move_from: StartSpotTemplateDTO
+    move_from: SpotTemplateDTO
     move_to: SpotTemplateDTO
-    sub_spots: list[SpotTemplateDTO]
+    sub_spots: list[SubSpotTemplateDTO]
     passengers_number: int
     description: MultiLanguages
     rules: MultiLanguages
@@ -63,7 +62,7 @@ class RoutePrototypeDTO:
 @dataclasses.dataclass
 class AddRoutesDTO:
     route_prototype: RoutePrototypeDTO
-    departure_dates: list[datetime.datetime]
+    departure_dates: list[tuple[datetime.datetime, datetime.datetime]]
 
 @dataclasses.dataclass
 class NotifyPassengerDTO:
