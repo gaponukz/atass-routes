@@ -22,10 +22,10 @@ class ViewRoutesHandler:
         self.router = APIRouter()
         self._service = service
 
-        self.router.add_api_route("/get_unique_routes", self.get_unique_routes, methods=["GET"])
-        self.router.add_api_route("/get_routes_family", self.get_routes_family_by_cities, methods=["GET"])
-        self.router.add_api_route("/get_route_by_id", self.get_route_by_id, methods=["GET"])
-        self.router.add_api_route("/get_path_info", self.get_path_info, methods=["GET"])
+        self.router.add_api_route("/api/routes/get_unique_routes", self.get_unique_routes, methods=["GET"])
+        self.router.add_api_route("/api/routes/get_routes_family", self.get_routes_family_by_cities, methods=["GET"])
+        self.router.add_api_route("/api/routes/get_route_by_id", self.get_route_by_id, methods=["GET"])
+        self.router.add_api_route("/api/routes/get_path_info", self.get_path_info, methods=["GET"])
     
     def get_unique_routes(self) ->  list[ShortRouteDTO]:
         return self._service.get_unique_routes()

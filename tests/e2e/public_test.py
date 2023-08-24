@@ -1,6 +1,6 @@
 import requests
 
-BASE_URL = "http://localhost:8000"
+BASE_URL = "http://localhost:8000/api/routes"
 
 def test_get_available_routes():
     url = f"{BASE_URL}/available?move_from_city=Київ&move_to_city=Варшава&date=*"

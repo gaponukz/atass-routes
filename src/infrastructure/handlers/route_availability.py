@@ -14,8 +14,8 @@ class RouteAvailabilityHandler:
         self._service = service
         self.router = APIRouter()
 
-        self.router.add_api_route("/available", self.generate_pathes, methods=["GET"])
-        self.router.add_api_route("/availability_graph", self.get_availability_graph, methods=["GET"])
+        self.router.add_api_route("/api/routes/available", self.generate_pathes, methods=["GET"])
+        self.router.add_api_route("/api/routes/availability_graph", self.get_availability_graph, methods=["GET"])
     
     def get_availability_graph(self) -> dict[str, list[str]]:
         return self._service.get_availability_graph()

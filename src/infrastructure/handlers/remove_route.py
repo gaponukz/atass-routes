@@ -12,7 +12,7 @@ class RemoveRouteHandler:
         self._delete_service = delete_service
         self.router = APIRouter()
 
-        self.router.add_api_route("/route", self.detete, methods=["DELETE"])
+        self.router.add_api_route("/api/routes/route", self.detete, methods=["DELETE"])
     
     def detete(self, route_id: HashId):
         self._delete_service.delete(route_id)

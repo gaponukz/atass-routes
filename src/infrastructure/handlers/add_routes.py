@@ -10,7 +10,7 @@ class AddRoutesHandler:
         self._sevice = sevice
         self.router = APIRouter()
 
-        self.router.add_api_route("/add_routes", self.add_routes, methods=["POST"])
+        self.router.add_api_route("/api/routes/add_routes", self.add_routes, methods=["POST"])
     
     def add_routes(self, dto: AddRoutesDTO):
         self._sevice.create_routes_from_prototype(dto)
