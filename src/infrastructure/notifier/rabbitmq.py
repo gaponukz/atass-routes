@@ -11,6 +11,7 @@ class RabbitMQEventNotifier:
         self._factory = dataclass_factory.Factory()
         self.connection = pika.BlockingConnection(self._connection_from_url(url))
         self.channel = self.connection.channel()
+        self._setup()
     
     def _setup(self):
         self.channel.exchange_declare(exchange="events_exchange", exchange_type="direct")
