@@ -1,3 +1,4 @@
+import time
 import json
 import typing
 import pika
@@ -78,8 +79,30 @@ class RoutesEventsListener:
         multiprocessing.Process(target=self._listen).start()
 
     def _listen(self):
-        self.channel.basic_consume(queue="route_payments", on_message_callback=self._callback, auto_ack=True)
-        self.channel.start_consuming()
+        while True:
+            try:
+                self.channel.basic_consume(queue="route_payments", on_message_callback=self._callback, auto_ack=True)
+                self.channel.start_consuming()
+            except pika.exceptions.ConnectionClosed:
+                self.reconnect()
+
+    def reconnect(self):
+        attempts = 0
+        while not self.connection.is_closed and attempts < 3:
+            try:
+                self.connection.close()
+            except:
+                pass
+
+            try:
+                self.connection = pika.BlockingConnection(self._connection_from_url(self.url))
+                self.channel = self.connection.channel()
+                self.channel.queue_bind(exchange="payments_exchange", queue="route_payments")
+                return
+            
+            except:
+                time.sleep(5)
+                attempts += 1
 
     def close(self):
         self.channel.close()
