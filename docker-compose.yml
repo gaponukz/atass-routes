@@ -29,3 +29,4 @@ services:
       - rabbitmq_url=amqp://user:password@rabbitmq:5672/
     volumes:
       - ./routes.json:/app/routes.json
+      - ./routes_app.log:/app/routes_app.log

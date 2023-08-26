@@ -89,18 +89,23 @@ class RoutesEventsListener:
         self.logger.info(f"Successfully notified passenger {passenger_json['id']}")
 
     def _callback(self, ch, method, properties, body):
-        self.process_message(body)
+        try:
+            self.process_message(body)
         
+        except Exception as error:
+            self.logger.warn(f"Can not process message, {error.__class__.__name__}: {error}")
+    
     def listen(self):
         multiprocessing.Process(target=self._listen).start()
 
     def _listen(self):
         while True:
             try:
-                self.channel.basic_consume(queue="route_payments", on_message_callback=self._callback, auto_ack=True)
+                self.channel.basic_consume(queue="route_payments", on_message_callback=self._callback)
                 self.channel.start_consuming()
-            except pika.exceptions.ConnectionClosed:
-                self.logger.warning("Connection closed in _listen")
+            
+            except Exception as error:
+                self.logger.warning(f"Connection closed in _listen, {error.__class__.__name__}: {error}")
                 self.reconnect()
 
     def reconnect(self):
@@ -119,6 +124,7 @@ class RoutesEventsListener:
                 return
             
             except:
+                self.logger.info("Sleep 5 seconds before reconnect")
                 time.sleep(5)
                 attempts += 1
 
