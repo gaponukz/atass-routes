@@ -30,11 +30,12 @@ from src.infrastructure.logger.decorators.edit_route import EditRoutersLogger
 from src.infrastructure.logger.decorators.route_availability import AvailabilityServiceLogger
 from src.infrastructure.logger.decorators.view_routes import ViewServiceLogger
 from src.infrastructure.logger.decorators.notify_passenger import NotifyPassengerLogger
+from src.infrastructure.logger.decorators.publish_event import LogEventSenderDecorator
 
 logger = ConsoleLogger()
 db = RouteRepository("routes.json")
 config = settings.EnvSettingsExporter().load()
-event_notifier = RabbitMQEventNotifier(config.rabbitmq_url)
+event_notifier = LogEventSenderDecorator(RabbitMQEventNotifier(config.rabbitmq_url), logger)
 gmail_notifier = NotifyPassengerLogger(GmailNotifier(
     Creds(config.gmail, config.gmail_password),
     Letter("Автобусний Квиток", "letters/new_route.html")
@@ -55,7 +56,7 @@ update_handler = UpdateRouteHandler(edit_routers_usecase)
 delete_handler = RemoveRouteHandler(delete_route_usecase)
 
 try:
-    RoutesEventsListener(add_passenger_usecase, gmail_notifier, config.rabbitmq_url).listen()
+    RoutesEventsListener(add_passenger_usecase, gmail_notifier, logger, config.rabbitmq_url).listen()
 
 except Exception as error:
     print("RoutesEventsListener not started")
