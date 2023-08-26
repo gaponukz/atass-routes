@@ -29,7 +29,8 @@ class RabbitMQEventNotifier:
             host=parsed_url.hostname or "localhost",
             port=parsed_url.port or 5672,
             virtual_host=parsed_url.path.strip('/') or '/',
-            credentials=credentials
+            credentials=credentials,
+            heartbeat=10
         )
 
     def publish_event(self, event: PassengerPlaceEvent):
