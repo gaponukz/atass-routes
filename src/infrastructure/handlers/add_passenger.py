@@ -29,6 +29,7 @@ class RoutesEventsListener:
             url: str
         ):
         
+        self.url = url
         self.add_passenger_service = add_passenger_service
         self.notify_passenger_service = notify_passenger_service
         self.logger = logger

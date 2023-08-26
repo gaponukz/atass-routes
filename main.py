@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from src.infrastructure.settings import settings
 from src.infrastructure.db.json_db import RouteRepository
-from src.infrastructure.logger.console import ConsoleLogger
+from src.infrastructure.logger.file import FileWriter
 from src.infrastructure.notifier.gmail import GmailNotifier, Creds, Letter
 from src.infrastructure.notifier.rabbitmq import RabbitMQEventNotifier
 
@@ -32,7 +32,7 @@ from src.infrastructure.logger.decorators.view_routes import ViewServiceLogger
 from src.infrastructure.logger.decorators.notify_passenger import NotifyPassengerLogger
 from src.infrastructure.logger.decorators.publish_event import LogEventSenderDecorator
 
-logger = ConsoleLogger()
+logger = FileWriter("routes_app.log")
 db = RouteRepository("routes.json")
 config = settings.EnvSettingsExporter().load()
 event_notifier = LogEventSenderDecorator(RabbitMQEventNotifier(config.rabbitmq_url), logger)
@@ -59,7 +59,7 @@ try:
     RoutesEventsListener(add_passenger_usecase, gmail_notifier, logger, config.rabbitmq_url).listen()
 
 except Exception as error:
-    print("RoutesEventsListener not started")
+    logger.error("RoutesEventsListener not started")
 
 app = FastAPI()
 app.add_middleware(
