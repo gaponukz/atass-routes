@@ -55,7 +55,7 @@ update_handler = UpdateRouteHandler(edit_routers_usecase)
 delete_handler = RemoveRouteHandler(delete_route_usecase)
 
 try:
-    RoutesEventsListener(add_passenger_usecase, gmail_notifier, config.rabbitmq_url).listen()
+    RoutesEventsListener(add_passenger_usecase, gmail_notifier, logger, config.rabbitmq_url).listen()
 
 except Exception as error:
     print("RoutesEventsListener not started")

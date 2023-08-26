@@ -15,20 +15,28 @@ class AddPassengerService(typing.Protocol):
 class PassengerNotifier(typing.Protocol):
     def notify(self, data: NotifyPassengerDTO): ...
 
+class Logger(typing.Protocol):
+    def info(self, message: str): ...
+
+    def warn(self, message: str): ...
+
 class RoutesEventsListener:
     def __init__(
             self,
             add_passenger_service: AddPassengerService,
             notify_passenger_service: PassengerNotifier,
+            logger: Logger,
             url: str
         ):
         
         self.add_passenger_service = add_passenger_service
         self.notify_passenger_service = notify_passenger_service
+        self.logger = logger
 
         self.connection = pika.BlockingConnection(self._connection_from_url(url))
         self.channel = self.connection.channel()
         self.channel.queue_bind(exchange="payments_exchange", queue="route_payments")
+        self.logger.info("Successfully connected to rabbitmq from __init__")
 
     def _connection_from_url(self, url: str) -> pika.ConnectionParameters:
         parsed_url = urlparse(url)
@@ -49,6 +57,7 @@ class RoutesEventsListener:
         )
     
     def process_message(self, message: str):
+        self.logger.info(f'Processing message: "{message[:10]}..."')
         data = json.loads(message)
         passenger_json = data['passenger']
 
@@ -62,15 +71,21 @@ class RoutesEventsListener:
             is_anonymous=passenger_json.get('isAnonymous', False),
         )
 
+        self.logger.info(f"Successfully parsed passenger {passenger_json['id']} from event")
+
         self.add_passenger_service.add_passenger(PaymentProcessed(
             route_id=data['routeId'],
             passenger=passenger
         ))
 
+        self.logger.info(f"Successfully added passenger {passenger_json['id']}")
+
         self.notify_passenger_service.notify(NotifyPassengerDTO(
             payment_id=data['paymentId'],
             passenger=passenger
         ))
+
+        self.logger.info(f"Successfully notified passenger {passenger_json['id']}")
 
     def _callback(self, ch, method, properties, body):
         self.process_message(body)
@@ -84,6 +99,7 @@ class RoutesEventsListener:
                 self.channel.basic_consume(queue="route_payments", on_message_callback=self._callback, auto_ack=True)
                 self.channel.start_consuming()
             except pika.exceptions.ConnectionClosed:
+                self.logger.warning("Connection closed in _listen")
                 self.reconnect()
 
     def reconnect(self):
@@ -98,6 +114,7 @@ class RoutesEventsListener:
                 self.connection = pika.BlockingConnection(self._connection_from_url(self.url))
                 self.channel = self.connection.channel()
                 self.channel.queue_bind(exchange="payments_exchange", queue="route_payments")
+                self.logger.info("Successfully reconnected")
                 return
             
             except:
