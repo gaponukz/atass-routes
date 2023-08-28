@@ -21,7 +21,7 @@ from src.infrastructure.handlers.remove_route import RemoveRouteHandler
 from src.infrastructure.handlers.add_routes import AddRoutesHandler
 from src.infrastructure.handlers.route_availability import RouteAvailabilityHandler
 from src.infrastructure.handlers.view_routes import ViewRoutesHandler
-from src.infrastructure.handlers.add_passenger import RoutesEventsListener
+from src.infrastructure.handlers.add_passenger import AddPassengerHandler
 
 from src.infrastructure.logger.decorators.add_passenger import AddPassengerLogger
 from src.infrastructure.logger.decorators.add_routes import AddRoutesLogger
@@ -54,12 +54,7 @@ availability_handler = RouteAvailabilityHandler(availability_usecase)
 view_handler = ViewRoutesHandler(view_usecase)
 update_handler = UpdateRouteHandler(edit_routers_usecase)
 delete_handler = RemoveRouteHandler(delete_route_usecase)
-
-try:
-    RoutesEventsListener(add_passenger_usecase, gmail_notifier, logger, config.rabbitmq_url).listen()
-
-except Exception as error:
-    logger.error("RoutesEventsListener not started")
+add_passenger_handler = AddPassengerHandler(add_passenger_usecase, gmail_notifier)
 
 app = FastAPI()
 app.add_middleware(
@@ -74,3 +69,4 @@ app.include_router(availability_handler.router)
 app.include_router(add_routes_handler.router)
 app.include_router(update_handler.router)
 app.include_router(delete_handler.router)
+app.include_router(add_passenger_handler.router)

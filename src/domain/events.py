@@ -5,6 +5,7 @@ from src.domain.value_objects import HashId
 
 @dataclasses.dataclass
 class PaymentProcessed:
+    payment_id: HashId
     route_id: HashId
     passenger: Passenger
 

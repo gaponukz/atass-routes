@@ -65,6 +65,12 @@ class AddRoutesDTO:
     departure_dates: list[tuple[datetime.datetime, datetime.datetime]]
 
 @dataclasses.dataclass
+class AddPassengerDTO:
+    payment_id: HashId
+    route_id: HashId
+    passenger: Passenger
+
+@dataclasses.dataclass
 class NotifyPassengerDTO:
     payment_id: HashId
     passenger: Passenger
