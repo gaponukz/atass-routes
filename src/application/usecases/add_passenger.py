@@ -20,11 +20,6 @@ class AddPassengerUseCase:
         if event.payment_id in self._last_payments:
             raise PaymentDuplicationError(event.payment_id)
 
-        self._last_payments.add(event.payment_id)
-
-        if len(self._last_payments) == self._last_payment_number:
-            self._last_payments.pop()
-
         routes = list(filter(lambda r: r.id == event.route_id, self._db.read_all()))
 
         if not routes:
@@ -36,4 +31,9 @@ class AddPassengerUseCase:
         if len(route.passengers) > route.passengers_number:
             raise CannotKillPassengersError(route.passengers_number)
 
+        self._last_payments.add(event.payment_id)
+
+        if len(self._last_payments) == self._last_payment_number:
+            self._last_payments.pop()
+        
         self._db.update(route)

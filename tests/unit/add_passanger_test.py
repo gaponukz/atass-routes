@@ -5,6 +5,7 @@ from src.domain.entities import Place
 from src.domain.entities import Passenger
 from src.domain.errors import CannotKillPassengersError
 from src.domain.errors import RouteNotFoundError
+from src.domain.errors import PaymentDuplicationError
 from src.domain.events import PaymentProcessed
 from src.application.usecases.add_passenger import AddPassengerUseCase
 
@@ -112,6 +113,15 @@ def test_add_passenger():
     service.add_passenger(PaymentProcessed(payment_id="2", route_id="12345", passenger=passenger1))
 
     assert len(db.routes[0].passengers) == 3
+
+    try:
+        service.add_passenger(PaymentProcessed(payment_id="2", route_id="none_existing_id", passenger=passenger1))
+    
+    except PaymentDuplicationError as e:
+        assert e.payment_id == "2"
+    
+    else:
+        assert False, "Duplicate!"
 
     try:
         service.add_passenger(PaymentProcessed(payment_id="3", route_id="12345", passenger=passenger1))
