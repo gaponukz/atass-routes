@@ -20,3 +20,8 @@ class RouteNotFoundError(Exception):
     def __init__(self, route_id: str):
         self.route_id = route_id
         super().__init__(f"Can not find route with identifier {route_id}")
+
+class PaymentDuplicationError(Exception):
+    def __init__(self, payment_id: str):
+        self.payment_id = payment_id
+        super().__init__(f"Paymend {payment_id} is duplicate")
