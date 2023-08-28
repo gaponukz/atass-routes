@@ -49,7 +49,7 @@ class DataBaseMock:
                         phone_number="1",
                         moving_from_id="start",
                         moving_towards_id="end",
-                        email_address="email@example.com",
+                        gmail="email@example.com",
                     ),
                     Passenger(
                         id="p2",
@@ -57,7 +57,7 @@ class DataBaseMock:
                         phone_number="2",
                         moving_from_id="start",
                         moving_towards_id="sub3",
-                        email_address="email@example.com",
+                        gmail="email@example.com",
                     ),
                 ],
                 prices={
@@ -98,7 +98,7 @@ def test_add_passenger():
         phone_number="123",
         moving_from_id="start",
         moving_towards_id="end",
-        email_address="email@example.com",
+        gmail="email@example.com",
     )
 
     try:

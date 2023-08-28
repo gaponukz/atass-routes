@@ -26,7 +26,7 @@ class Passenger:
     phone_number: str
     moving_from_id: HashId
     moving_towards_id: HashId
-    email_address: str
+    gmail: str
     id: HashId
     is_anonymous: bool = True
 

@@ -164,3 +164,27 @@ def test_update_route():
     url = f"{BASE_URL}/route?route_id=7c47bcb9-8179-49b5-93fd-089fafa793d3"
     response = requests.put(url, json={'route': data})
     assert response.status_code == 200
+
+def test_add_passenger():
+    response = requests.post(f"{BASE_URL}/add_passenger", json={
+        "paymentId": "124",
+        "routeId": "7c47bcb9-8179-49b5-93fd-089fafa793d3",
+        "passenger": {
+            "fullName": "Adam Qw",
+            "phoneNumber": "832456932",
+            "movingFromId": "c279d1f3-ddb9-4091-8408-d88bdcc0a040",
+            "movingTowardsId": "dbca1b8a-0c26-48db-8497-ad103e0fd78c",
+            "gmail": "test@gmail.com",
+            "id": "123214oif21",
+            "isAnonymous": True
+        }
+    })
+    
+    assert response.status_code == 200
+
+    url = f"{BASE_URL}/get_route_by_id?route_id=7c47bcb9-8179-49b5-93fd-089fafa793d3"
+    response = requests.get(url)
+
+    data = response.json()
+
+    assert data['passengers'][0]['id'] == "123214oif21"
