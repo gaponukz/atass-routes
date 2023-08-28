@@ -101,7 +101,7 @@ def test_add_passenger():
     )
 
     try:
-        service.add_passenger(PaymentProcessed(route_id="none_existing_id", passenger=passenger1))
+        service.add_passenger(PaymentProcessed(payment_id="", route_id="none_existing_id", passenger=passenger1))
     
     except RouteNotFoundError as e:
         assert e.route_id == "none_existing_id"
@@ -109,12 +109,12 @@ def test_add_passenger():
     else:
         assert False, "Why we can add a passenger to non existent route?"
     
-    service.add_passenger(PaymentProcessed(route_id="12345", passenger=passenger1))
+    service.add_passenger(PaymentProcessed(payment_id="", route_id="12345", passenger=passenger1))
 
     assert len(db.routes[0].passengers) == 3
 
     try:
-        service.add_passenger(PaymentProcessed(route_id="12345", passenger=passenger1))
+        service.add_passenger(PaymentProcessed(payment_id="", route_id="12345", passenger=passenger1))
     
     except CannotKillPassengersError as e:
         assert e.passengers_number == 3
