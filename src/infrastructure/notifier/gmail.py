@@ -27,7 +27,7 @@ class GmailNotifier:
 
     def notify(self, data: NotifyPassengerDTO):
         message = self.generate_letter(
-            data.passenger.email_address,
+            data.passenger.gmail,
             data.passenger.full_name,
             data.payment_id
         )
@@ -35,7 +35,7 @@ class GmailNotifier:
         server = smtplib.SMTP("smtp.gmail.com", 587)
         server.starttls()
         server.login(self.creds.gmail, self.creds.password)
-        server.sendmail(self.creds.gmail, [data.passenger.email_address], message)
+        server.sendmail(self.creds.gmail, [data.passenger.gmail], message)
         server.quit()
 
     def generate_letter(self, to: str, full_name: str, payment_id: str):

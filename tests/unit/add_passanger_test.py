@@ -5,6 +5,7 @@ from src.domain.entities import Place
 from src.domain.entities import Passenger
 from src.domain.errors import CannotKillPassengersError
 from src.domain.errors import RouteNotFoundError
+from src.domain.errors import PaymentDuplicationError
 from src.domain.events import PaymentProcessed
 from src.application.usecases.add_passenger import AddPassengerUseCase
 
@@ -48,7 +49,7 @@ class DataBaseMock:
                         phone_number="1",
                         moving_from_id="start",
                         moving_towards_id="end",
-                        email_address="email@example.com",
+                        gmail="email@example.com",
                     ),
                     Passenger(
                         id="p2",
@@ -56,7 +57,7 @@ class DataBaseMock:
                         phone_number="2",
                         moving_from_id="start",
                         moving_towards_id="sub3",
-                        email_address="email@example.com",
+                        gmail="email@example.com",
                     ),
                 ],
                 prices={
@@ -97,11 +98,11 @@ def test_add_passenger():
         phone_number="123",
         moving_from_id="start",
         moving_towards_id="end",
-        email_address="email@example.com",
+        gmail="email@example.com",
     )
 
     try:
-        service.add_passenger(PaymentProcessed(route_id="none_existing_id", passenger=passenger1))
+        service.add_passenger(PaymentProcessed(payment_id="1", route_id="none_existing_id", passenger=passenger1))
     
     except RouteNotFoundError as e:
         assert e.route_id == "none_existing_id"
@@ -109,12 +110,21 @@ def test_add_passenger():
     else:
         assert False, "Why we can add a passenger to non existent route?"
     
-    service.add_passenger(PaymentProcessed(route_id="12345", passenger=passenger1))
+    service.add_passenger(PaymentProcessed(payment_id="2", route_id="12345", passenger=passenger1))
 
     assert len(db.routes[0].passengers) == 3
 
     try:
-        service.add_passenger(PaymentProcessed(route_id="12345", passenger=passenger1))
+        service.add_passenger(PaymentProcessed(payment_id="2", route_id="none_existing_id", passenger=passenger1))
+    
+    except PaymentDuplicationError as e:
+        assert e.payment_id == "2"
+    
+    else:
+        assert False, "Duplicate!"
+
+    try:
+        service.add_passenger(PaymentProcessed(payment_id="3", route_id="12345", passenger=passenger1))
     
     except CannotKillPassengersError as e:
         assert e.passengers_number == 3
