@@ -30,10 +30,7 @@ class AddPassengerHandler:
     async def add_passenger(self, request: Request):
         data = self.factory.load(await request.json(), PaymentProcessed)
 
-        self.add_passenger_service.add_passenger(PaymentProcessed(
-            route_id=data.route_id,
-            passenger=data.passenger
-        ))
+        self.add_passenger_service.add_passenger(data)
 
         self.notify_passenger_service.notify(NotifyPassengerDTO(
             payment_id=data.payment_id,
