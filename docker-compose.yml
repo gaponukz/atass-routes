@@ -16,6 +16,15 @@ services:
       - 15672:15672
       - 5672:5672
 
+  mongodb:
+    image: mongo:latest
+    hostname: mongodb
+    ports:
+      - 27017:27017
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=mongoadmin
+      - MONGO_INITDB_ROOT_PASSWORD=secret
+
   routes_app:
     build:
       context: .
@@ -27,6 +36,7 @@ services:
       - "8000:8000"
     environment:
       - rabbitmq_url=amqp://user:password@rabbitmq:5672/
+      - mongodb_url=mongodb://mongoadmin:secret@mongodb:27017/
     volumes:
       - ./routes.json:/app/routes.json
       - ./routes_app.log:/app/routes_app.log
