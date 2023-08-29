@@ -27,6 +27,7 @@ services:
       - "8000:8000"
     environment:
       - rabbitmq_url=amqp://user:password@rabbitmq:5672/
+      - mongodb_url=mongodb+srv://gaponukx:G_mY2WsMUx_69cX@cluster0.y6jhw.mongodb.net/test
     volumes:
       - ./routes.json:/app/routes.json
       - ./routes_app.log:/app/routes_app.log
