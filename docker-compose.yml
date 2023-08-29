@@ -30,3 +30,5 @@ services:
     volumes:
       - ./routes.json:/app/routes.json
       - ./routes_app.log:/app/routes_app.log
+    env_file:
+      - .env
