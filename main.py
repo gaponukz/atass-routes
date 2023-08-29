@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from src.infrastructure.settings import settings
-from src.infrastructure.db.json_db import RouteRepository
+from src.infrastructure.db.mongodb import RouteRepository
 from src.infrastructure.logger.file import FileWriter
 from src.infrastructure.notifier.gmail import GmailNotifier, Creds, Letter
 from src.infrastructure.notifier.rabbitmq import RabbitMQEventNotifier
@@ -33,8 +33,8 @@ from src.infrastructure.logger.decorators.notify_passenger import NotifyPassenge
 from src.infrastructure.logger.decorators.publish_event import LogEventSenderDecorator
 
 logger = FileWriter("routes_app.log")
-db = RouteRepository("routes.json")
 config = settings.EnvSettingsExporter().load()
+db = RouteRepository(config.mongodb_url, "Cluster0")
 event_notifier = LogEventSenderDecorator(RabbitMQEventNotifier(config.rabbitmq_url), logger)
 gmail_notifier = NotifyPassengerLogger(GmailNotifier(
     Creds(config.gmail, config.gmail_password),
