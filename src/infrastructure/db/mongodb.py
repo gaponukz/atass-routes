@@ -1,13 +1,14 @@
 import dataclass_factory
 from pymongo import MongoClient
+from pymongo.database import Database
 from src.domain.value_objects import HashId
 from src.domain.entities import Route
 from src.domain.errors import RouteNotFoundError
 
 class RouteRepository:
     def __init__(self, connection_string, collection: str):
-        client = MongoClient(connection_string)
-        db = client['Bus']
+        client: MongoClient = MongoClient(connection_string)
+        db: Database = client['Bus']
         self.collection = db[collection]
         self.factory = dataclass_factory.Factory()
 
