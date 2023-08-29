@@ -1,4 +1,3 @@
-import time
 import json
 import pika
 import dataclass_factory
@@ -37,36 +36,15 @@ class RabbitMQEventNotifier:
         )
 
     def publish_event(self, event: PassengerPlaceEvent):
-        try:
-            self.channel.basic_publish(
-                exchange="events_exchange",
-                routing_key="passenger_events",
-                body=json.dumps(self._factory.dump(event)),
-                properties=pika.BasicProperties(
-                    content_type='application/json',
-                    delivery_mode=2
-                )
+        self.channel.basic_publish(
+            exchange="events_exchange",
+            routing_key="passenger_events",
+            body=json.dumps(self._factory.dump(event)),
+            properties=pika.BasicProperties(
+                content_type='application/json',
+                delivery_mode=2
             )
-        except pika.exceptions.StreamLostError:
-            self._reconnect()
-            self.publish_event(event)
-
-    def _reconnect(self):
-        attempts = 0
-        while not self.connection.is_closed and attempts < 3:
-            try:
-                self.connection.close()
-            except:
-                pass
-
-            try:
-                self.connection = pika.BlockingConnection(self._connection_from_url(self.url))
-                self.channel = self.connection.channel()
-                self._setup()
-                return
-            except Exception as e:
-                time.sleep(5)
-                attempts += 1
+        )
 
     def close(self):
         self.connection.close()
