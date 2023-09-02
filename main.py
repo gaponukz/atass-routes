@@ -12,8 +12,8 @@ from src.application.usecases.route_availability import RouteAvailabilityUseCase
 from src.application.usecases.add_routes import AddRoutesUseCase
 from src.application.usecases.edit_routes import EditRoutersUseCase
 from src.application.usecases.delete_route import DeleteRouteUseCase
-from src.application.usecases.add_passenger import AddPassengerUseCase
-from src.application.decorators.on_add_passenger import SendEventOnPassengerAddedDecorator
+from application.usecases.manage_passengers import ManagePassengersUseCase
+from src.application.decorators.on_place_changed import SendEventOnPlaceChangedDecorator
 from src.application.decorators.on_remove_route import SendEventOnDeleteRouteDecorator
 
 from src.infrastructure.handlers.update_route import UpdateRouteHandler
@@ -23,7 +23,7 @@ from src.infrastructure.handlers.route_availability import RouteAvailabilityHand
 from src.infrastructure.handlers.view_routes import ViewRoutesHandler
 from src.infrastructure.handlers.add_passenger import AddPassengerHandler
 
-from src.infrastructure.logger.decorators.add_passenger import AddPassengerLogger
+from infrastructure.logger.decorators.manage_places import PlaceServiceLogger
 from src.infrastructure.logger.decorators.add_routes import AddRoutesLogger
 from src.infrastructure.logger.decorators.delete_route import DeleteRouteLogger
 from src.infrastructure.logger.decorators.edit_route import EditRoutersLogger
@@ -47,7 +47,7 @@ availability_usecase = AvailabilityServiceLogger(RouteAvailabilityUseCase(db), l
 add_routes_usecase = AddRoutesLogger(AddRoutesUseCase(db), logger)
 edit_routers_usecase = EditRoutersLogger(EditRoutersUseCase(db), logger)
 delete_route_usecase = DeleteRouteLogger(SendEventOnDeleteRouteDecorator(DeleteRouteUseCase(db), event_notifier, db), logger)
-add_passenger_usecase = AddPassengerLogger(SendEventOnPassengerAddedDecorator(AddPassengerUseCase(db), event_notifier), logger)
+add_passenger_usecase = PlaceServiceLogger(SendEventOnPlaceChangedDecorator(ManagePassengersUseCase(db), event_notifier), logger)
 
 add_routes_handler = AddRoutesHandler(add_routes_usecase)
 availability_handler = RouteAvailabilityHandler(availability_usecase)
