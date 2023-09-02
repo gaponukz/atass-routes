@@ -5,9 +5,11 @@ from src.domain.entities import Place
 from src.domain.entities import Passenger
 from src.domain.errors import CannotKillPassengersError
 from src.domain.errors import RouteNotFoundError
+from src.domain.errors import PassengerNotFoundError
 from src.domain.errors import PaymentDuplicationError
 from src.domain.events import PaymentProcessed
-from src.application.usecases.add_passenger import AddPassengerUseCase
+from src.application.dto import DeletePassengerDTO
+from src.application.usecases.manage_passengers import ManagePassengersUseCase
 
 class DataBaseMock:
     def __init__(self):
@@ -90,7 +92,7 @@ class DataBaseMock:
 
 def test_add_passenger():
     db = DataBaseMock()
-    service = AddPassengerUseCase(db)
+    service = ManagePassengersUseCase(db)
 
     passenger1 = Passenger(
         id='1',
@@ -135,3 +137,31 @@ def test_add_passenger():
         
         else:
             assert False, 'passenger was not added but got "OK"'
+
+def test_delete_passenger():
+    db = DataBaseMock()
+    service = ManagePassengersUseCase(db)
+
+    try:
+        service.delete_passenger(DeletePassengerDTO(route_id="12346", move_from_id="start", move_to_id="sub3", passenger_id="p2"))
+    
+    except RouteNotFoundError as error:
+        assert error.route_id == "12346"
+    
+    else:
+        assert False, "Why we can delete a passenger from non existent route?"
+    
+    try:
+        service.delete_passenger(DeletePassengerDTO(route_id="12345", move_from_id="start", move_to_id="sub3", passenger_id="lol"))
+
+    except PassengerNotFoundError:
+        pass
+
+    else:
+        assert False, "Why we can delete a non existent passenger?"
+
+    assert len(db.routes[0].passengers) == 2
+
+    service.delete_passenger(DeletePassengerDTO(route_id="12345", move_from_id="start", move_to_id="sub3", passenger_id="p2"))
+
+    assert len(db.routes[0].passengers) == 1

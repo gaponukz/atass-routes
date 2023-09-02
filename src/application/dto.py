@@ -68,3 +68,10 @@ class AddRoutesDTO:
 class NotifyPassengerDTO:
     payment_id: HashId
     passenger: Passenger
+
+@dataclasses.dataclass
+class DeletePassengerDTO:
+    route_id: HashId
+    move_from_id: HashId
+    move_to_id: HashId
+    passenger_id: HashId
