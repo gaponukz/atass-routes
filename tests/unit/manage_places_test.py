@@ -5,10 +5,11 @@ from src.domain.entities import Place
 from src.domain.entities import Passenger
 from src.domain.errors import CannotKillPassengersError
 from src.domain.errors import RouteNotFoundError
+from src.domain.errors import PassengerNotFoundError
 from src.domain.errors import PaymentDuplicationError
 from src.domain.events import PaymentProcessed
 from src.application.dto import DeletePassengerDTO
-from application.usecases.manage_passengers import ManagePassengersUseCase
+from src.application.usecases.manage_passengers import ManagePassengersUseCase
 
 class DataBaseMock:
     def __init__(self):
@@ -141,17 +142,26 @@ def test_delete_passenger():
     db = DataBaseMock()
     service = ManagePassengersUseCase(db)
 
-    passenger1 = Passenger(
-        id='1',
-        full_name="Ada Nab",
-        phone_number="123",
-        moving_from_id="start",
-        moving_towards_id="end",
-        gmail="email@example.com",
-    )
+    try:
+        service.delete_passenger(DeletePassengerDTO(route_id="12346", move_from_id="start", move_to_id="sub3", passenger_id="p2"))
+    
+    except RouteNotFoundError as error:
+        assert error.route_id == "12346"
+    
+    else:
+        assert False, "Why we can delete a passenger from non existent route?"
+    
+    try:
+        service.delete_passenger(DeletePassengerDTO(route_id="12345", move_from_id="start", move_to_id="sub3", passenger_id="lol"))
 
-    service.add_passenger(PaymentProcessed(payment_id="2", route_id="12345", passenger=passenger1))
+    except PassengerNotFoundError:
+        pass
 
-    service.delete_passenger(DeletePassengerDTO(route_id="12345", move_from_id="start", move_to_id="end", passenger_id="1"))
+    else:
+        assert False, "Why we can delete a non existent passenger?"
 
-    assert len(db.routes[0].passengers) == 2 
+    assert len(db.routes[0].passengers) == 2
+
+    service.delete_passenger(DeletePassengerDTO(route_id="12345", move_from_id="start", move_to_id="sub3", passenger_id="p2"))
+
+    assert len(db.routes[0].passengers) == 1

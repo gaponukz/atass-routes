@@ -12,7 +12,7 @@ from src.application.usecases.route_availability import RouteAvailabilityUseCase
 from src.application.usecases.add_routes import AddRoutesUseCase
 from src.application.usecases.edit_routes import EditRoutersUseCase
 from src.application.usecases.delete_route import DeleteRouteUseCase
-from application.usecases.manage_passengers import ManagePassengersUseCase
+from src.application.usecases.manage_passengers import ManagePassengersUseCase
 from src.application.decorators.on_place_changed import SendEventOnPlaceChangedDecorator
 from src.application.decorators.on_remove_route import SendEventOnDeleteRouteDecorator
 

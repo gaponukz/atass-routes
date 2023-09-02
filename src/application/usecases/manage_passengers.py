@@ -4,6 +4,7 @@ from src.domain.events import PaymentProcessed
 from src.domain.errors import RouteNotFoundError
 from src.domain.errors import CannotKillPassengersError
 from src.domain.errors import PaymentDuplicationError
+from src.domain.errors import PassengerNotFoundError
 from src.application.dto import DeletePassengerDTO
 
 class Database(typing.Protocol):
@@ -46,6 +47,11 @@ class ManagePassengersUseCase:
             raise RouteNotFoundError(data.route_id)
         
         route = routes[0]
-        route.passengers = [passenger for passenger in route.passengers if passenger.id == data.passenger_id]
+        before = len(route.passengers)
+
+        route.passengers = [passenger for passenger in route.passengers if passenger.id != data.passenger_id]
+
+        if before == len(route.passengers):
+            raise PassengerNotFoundError()
 
         self._db.update(route)
