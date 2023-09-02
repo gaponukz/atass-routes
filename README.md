@@ -370,3 +370,17 @@
   }
 }
 ```
+
+### Delete passenger
+- URL: `/passenger`
+- Method: `DELETE`
+- Description: Delete route by id
+- Request example:
+```json
+{
+  "route_id": "7c47bcb9-8179-49b5-93fd-089fafa793d3",
+  "move_from_id": "c279d1f3-ddb9-4091-8408-d88bdcc0a040",
+  "move_to_id": "dbca1b8a-0c26-48db-8497-ad103e0fd78c",
+  "passenger_id": "123214oif21",
+}
+```
