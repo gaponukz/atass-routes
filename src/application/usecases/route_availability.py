@@ -11,6 +11,7 @@ from src.application.dto import GetAviableRoutesDTO
 class ReadAbleDataBase(typing.Protocol):
     def read_all(self) -> list[Route]: ...
 
+    def with_cities(self, move_from: str, move_to) -> list[Route]: ...
 
 class RouteAvailabilityUseCase:
     def __init__(self, db: ReadAbleDataBase) -> None:
@@ -18,7 +19,7 @@ class RouteAvailabilityUseCase:
     
     def generate_pathes(self, dto: GetAviableRoutesDTO) -> list[Path]:
         pathes = []
-        routes = self._db.read_all()
+        routes = self._db.with_cities(dto.move_from_city, dto.move_to_city)
 
         for route in routes:
             for path in self._generating_aviable_pathes(route):

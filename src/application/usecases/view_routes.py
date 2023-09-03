@@ -2,13 +2,16 @@ import copy
 import typing
 from src.domain.entities import Route
 from src.domain.value_objects import HashId
-from src.domain.errors import RouteNotFoundError
 from src.domain.errors import SpotNotFoundError
 from src.application.dto import ShortRouteDTO
 from src.application.dto import PathInfoDTO
 
 class ReadAbleDataBase(typing.Protocol):
     def read_all(self) -> list[Route]: ...
+
+    def by_cities(self, move_from: str, move_to: str) -> list[Route]: ...
+
+    def by_id(self, route_id: HashId) -> Route: ...
 
 class ViewRoutesUseCase:
     def __init__(self, db: ReadAbleDataBase) -> None:
@@ -29,23 +32,13 @@ class ViewRoutesUseCase:
         return list(unique.values())
 
     def get_routes_family_by_cities(self, move_from_city: str, move_to_city: str) -> list[Route]:
-        routes = self._db.read_all()
-        filtered = filter(lambda route: route.move_from.place.city.lower() == move_from_city.lower() 
-                          and route.move_to.place.city.lower() == move_to_city.lower(), routes)
-
-        return list(filtered)
+        return self._db.by_cities(move_from_city, move_to_city)
     
     def get_route_by_id(self, route_id: HashId) -> Route:
-        routes = self._db.read_all()
-        filtered = list(filter(lambda route: route.id == route_id, routes))
-
-        if not filtered:
-            raise RouteNotFoundError(route_id)
-
-        return filtered[0]
+        return self._db.by_id(route_id)
 
     def get_path_info(self, route_id: HashId, move_from: HashId, move_to: HashId) -> PathInfoDTO:
-        route = self.get_route_by_id(route_id)
+        route = self._db.by_id(route_id)
         routes_spots = route.sub_spots.copy()
         routes_spots.insert(0, route.move_from)
         routes_spots.insert(-1, route.move_to)

@@ -17,13 +17,49 @@ class RouteRepository:
         self.collection.insert_one(route_dict)
 
     def read_all(self) -> list[Route]:
-        routes = []
+        return [self.factory.load(route_dict, Route) for route_dict in self.collection.find()]
 
-        for route_dict in self.collection.find():
-            route = self.factory.load(route_dict, Route)
-            routes.append(route)
+    def by_cities(self, move_from: str, move_to: str) -> list[Route]:
+        query = {
+            "$and": [
+                {"move_from.place.city": move_from},
+                {"move_to.place.city": move_to}
+            ]
+        }
         
-        return routes
+        return [self.factory.load(route_dict, Route) for route_dict in self.collection.find(query)]
+
+    def with_cities(self, move_from: str, move_to) -> list[Route]:
+        query = {
+            "$or": [
+                {"$and": [
+                    {"move_from.place.city": move_from},
+                    {"move_to.place.city": move_to},
+                ]},
+                {"$and": [
+                    {"move_from.place.city": move_from},
+                    {"sub_spots.place.city": {"$regex": move_to, "$options": "i"}}
+                ]},
+                {"$and": [
+                    {"sub_spots.place.city": {"$regex": move_from, "$options": "i"}},
+                    {"sub_spots.place.city": {"$regex": move_to, "$options": "i"}}
+                ]},
+                {"$and": [
+                    {"sub_spots.place.city": {"$regex": move_from, "$options": "i"}},
+                    {"sub_spots.place.city": {"$regex": move_to, "$options": "i"}}
+                ]},
+            ]
+        }
+
+        return [self.factory.load(route_dict, Route) for route_dict in self.collection.find(query)]
+    
+    def by_id(self, route_id: HashId) -> Route:
+        route = self.collection.find_one({"id": route_id})
+
+        if not route:
+            raise RouteNotFoundError(route_id)
+    
+        return self.factory.load(route, Route)
 
     def update(self, route: Route):
         route_dict = self.factory.dump(route)
@@ -33,7 +69,7 @@ class RouteRepository:
         result = self.collection.delete_one({"id": route_id})
 
         if result.deleted_count == 0:
-            raise RouteNotFoundError(f"Route with id {route_id} not found")
+            raise RouteNotFoundError(route_id)
 
     def clear(self):
         self.collection.delete_many({})

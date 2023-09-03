@@ -7,6 +7,9 @@ from src.application.dto import GetAviableRoutesDTO
 from src.application.usecases.route_availability import RouteAvailabilityUseCase
 
 class DataBaseStub:
+    def with_cities(self, move_from: str, move_to) -> list[Route]:
+        return self.read_all()
+
     def read_all(self) -> list[Route]:
         return [
             Route(
