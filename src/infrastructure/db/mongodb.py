@@ -16,8 +16,8 @@ class RouteRepository:
         self.collection.create_index([("move_to.place.city", pymongo.ASCENDING)])
 
         self.collection.create_indexes([
-            [("move_from.place.city", pymongo.ASCENDING)],
-            [("move_to.place.city", pymongo.ASCENDING)]
+            pymongo.IndexModel([("move_from.place.city", pymongo.ASCENDING)]),
+            pymongo.IndexModel([("move_to.place.city", pymongo.ASCENDING)])
         ])
 
     def create(self, route: Route):
