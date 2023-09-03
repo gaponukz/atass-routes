@@ -1,5 +1,5 @@
+import pymongo
 import dataclass_factory
-from pymongo import MongoClient
 from pymongo.database import Database
 from src.domain.value_objects import HashId
 from src.domain.entities import Route
@@ -7,10 +7,18 @@ from src.domain.errors import RouteNotFoundError
 
 class RouteRepository:
     def __init__(self, connection_string, collection: str):
-        client: MongoClient = MongoClient(connection_string)
+        client: pymongo.MongoClient = pymongo.MongoClient(connection_string)
         db: Database = client['Bus']
         self.collection = db[collection]
         self.factory = dataclass_factory.Factory()
+
+        self.collection.create_index([("move_from.place.city", pymongo.ASCENDING)])
+        self.collection.create_index([("move_to.place.city", pymongo.ASCENDING)])
+
+        self.collection.create_indexes([
+            pymongo.IndexModel([("move_from.place.city", pymongo.ASCENDING)]),
+            pymongo.IndexModel([("move_to.place.city", pymongo.ASCENDING)])
+        ])
 
     def create(self, route: Route):
         route_dict = self.factory.dump(route)
