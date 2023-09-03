@@ -17,26 +17,44 @@ class RouteRepository:
         self.collection.insert_one(route_dict)
 
     def read_all(self) -> list[Route]:
-        routes = []
-
-        for route_dict in self.collection.find():
-            route = self.factory.load(route_dict, Route)
-            routes.append(route)
-        
-        return routes
+        return [self.factory.load(route_dict, Route) for route_dict in self.collection.find()]
 
     def by_cities(self, move_from: str, move_to: str) -> list[Route]:
         query = {
             "move_from": {
-                "place": {"city": move_from.capitalize()}
+                "place": {"city": move_from}
             },
             "move_to": {
-                "place": {"city": move_to.capitalize()}
+                "place": {"city": move_to}
             }
         }
         
         return [self.factory.load(route_dict, Route) for route_dict in self.collection.find(query)]
 
+    def with_cities(self, move_from: str, move_to) -> list[Route]:
+        query = {
+            "$or": [
+                {"$and": [
+                    {"move_from.place.city": move_from},
+                    {"move_to.place.city": move_to},
+                ]},
+                {"$and": [
+                    {"move_from.place.city": move_from},
+                    {"sub_spots.place.city": {"$regex": move_to, "$options": "i"}}
+                ]},
+                {"$and": [
+                    {"sub_spots.place.city": {"$regex": move_from, "$options": "i"}},
+                    {"sub_spots.place.city": {"$regex": move_to, "$options": "i"}}
+                ]},
+                {"$and": [
+                    {"sub_spots.place.city": {"$regex": move_from, "$options": "i"}},
+                    {"sub_spots.place.city": {"$regex": move_to, "$options": "i"}}
+                ]},
+            ]
+        }
+
+        return [self.factory.load(route_dict, Route) for route_dict in self.collection.find(query)]
+    
     def by_id(self, route_id: HashId) -> Route:
         route = self.collection.find_one({"id": route_id})
 
