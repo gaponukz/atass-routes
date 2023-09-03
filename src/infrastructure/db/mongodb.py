@@ -25,6 +25,26 @@ class RouteRepository:
         
         return routes
 
+    def by_cities(self, move_from: str, move_to: str) -> list[Route]:
+        query = {
+            "move_from": {
+                "place": {"city": move_from.capitalize()}
+            },
+            "move_to": {
+                "place": {"city": move_to.capitalize()}
+            }
+        }
+        
+        return [self.factory.load(route_dict, Route) for route_dict in self.collection.find(query)]
+
+    def by_id(self, route_id: HashId) -> Route:
+        route = self.collection.find_one({"id": route_id})
+
+        if not route:
+            raise RouteNotFoundError(route_id)
+    
+        return self.factory.load(route, Route)
+
     def update(self, route: Route):
         route_dict = self.factory.dump(route)
         self.collection.update_one({"id": route.id}, {"$set": route_dict})
@@ -33,7 +53,7 @@ class RouteRepository:
         result = self.collection.delete_one({"id": route_id})
 
         if result.deleted_count == 0:
-            raise RouteNotFoundError(f"Route with id {route_id} not found")
+            raise RouteNotFoundError(route_id)
 
     def clear(self):
         self.collection.delete_many({})

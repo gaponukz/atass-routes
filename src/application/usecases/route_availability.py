@@ -10,8 +10,7 @@ from src.application.dto import GetAviableRoutesDTO
 
 class ReadAbleDataBase(typing.Protocol):
     def read_all(self) -> list[Route]: ...
-
-
+    
 class RouteAvailabilityUseCase:
     def __init__(self, db: ReadAbleDataBase) -> None:
         self._db = db

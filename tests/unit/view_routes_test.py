@@ -2,12 +2,13 @@ import datetime
 from src.domain.entities import Route
 from src.domain.entities import Spot
 from src.domain.entities import Place
-from src.domain.errors import SpotNotFoundError
+from src.domain.value_objects import HashId
+from src.domain.errors import SpotNotFoundError, RouteNotFoundError
 from src.application.usecases.view_routes import ViewRoutesUseCase
 
 class DataBaseStub:
-    def read_all(self) -> list[Route]:
-        return [
+    def __init__(self):
+        self.routes = [
             Route(
                 id="1",
                 passengers_number=1,
@@ -64,6 +65,23 @@ class DataBaseStub:
                 transportation_rules={"ua": "Hi", "en": "Hi", "pl": "Hi"},
             )
         ]
+
+    def read_all(self) -> list[Route]:
+        return self.routes
+
+    def by_cities(self, move_from: str, move_to: str) -> list[Route]:
+        filtered = filter(lambda route: route.move_from.place.city.lower() == move_from.lower() 
+                          and route.move_to.place.city.lower() == move_to.lower(), self.routes)
+
+        return list(filtered)
+
+    def by_id(self, route_id: HashId) -> Route:
+        filtered = list(filter(lambda route: route.id == route_id, self.routes))
+
+        if not filtered:
+            raise RouteNotFoundError(route_id)
+
+        return filtered[0]
 
 def test_get_unique_routes():
     service = ViewRoutesUseCase(DataBaseStub())
