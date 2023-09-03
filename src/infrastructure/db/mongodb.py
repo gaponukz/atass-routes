@@ -21,12 +21,10 @@ class RouteRepository:
 
     def by_cities(self, move_from: str, move_to: str) -> list[Route]:
         query = {
-            "move_from": {
-                "place": {"city": move_from}
-            },
-            "move_to": {
-                "place": {"city": move_to}
-            }
+            "$and": [
+                {"move_from.place.city": move_from},
+                {"move_to.place.city": move_to}
+            ]
         }
         
         return [self.factory.load(route_dict, Route) for route_dict in self.collection.find(query)]
