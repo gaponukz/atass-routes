@@ -167,7 +167,7 @@ def test_update_route():
 
 def test_change_places():
     response = requests.post(f"{BASE_URL}/add_passenger", json={
-        "paymentId": "124",
+        "paymentId": str(uuid.uuid4()),
         "routeId": "7c47bcb9-8179-49b5-93fd-089fafa793d3",
         "passenger": {
             "fullName": "Adam Qw",
