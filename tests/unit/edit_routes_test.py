@@ -1,4 +1,5 @@
 import datetime
+from src.domain.value_objects import HashId
 from src.domain.entities import Route
 from src.domain.entities import Spot
 from src.domain.entities import Place
@@ -90,6 +91,11 @@ class DataBaseMock:
             if self.routes[i].id == route.id:
                 self.routes[i] = route
 
+    def by_id(self, route_id: HashId) -> Route:
+        for i in range(len(self.routes)):
+            if self.routes[i].id == route_id:
+                return self.routes[i]
+         
 def test_update():
     db = DataBaseMock()
     service = EditRoutersUseCase(db)
@@ -170,4 +176,4 @@ def test_update():
     assert new_route.prices['sub2']['end'] == 0
     assert new_route.prices['sub2']['sub3'] == 0
     assert new_route.prices['sub3']['end'] == 0
-    assert len(new_route.passengers) == 2
+    assert len(new_route.passengers) == 3

@@ -7,8 +7,8 @@ from src.domain.errors import RouteNotFoundError
 
 class RouteRepository:
     def __init__(self, connection_string, collection: str):
-        client: pymongo.MongoClient = pymongo.MongoClient(connection_string)
-        db: Database = client['Bus']
+        self.client: pymongo.MongoClient = pymongo.MongoClient(connection_string)
+        db: Database = self.client['Bus']
         self.collection = db[collection]
         self.factory = dataclass_factory.Factory()
 
@@ -70,14 +70,36 @@ class RouteRepository:
         return self.factory.load(route, Route)
 
     def update(self, route: Route):
-        route_dict = self.factory.dump(route)
-        self.collection.update_one({"id": route.id}, {"$set": route_dict})
+        session = self.client.start_session()
+        try:
+            with session.start_transaction():
+                route_dict = self.factory.dump(route)
+                self.collection.update_one({"id": route.id}, {"$set": route_dict}, session=session)
+
+            session.commit_transaction()
+        except Exception as e:
+            session.abort_transaction()
+            raise e
+        
+        finally:
+            session.end_session()
 
     def delete(self, route_id: HashId):
-        result = self.collection.delete_one({"id": route_id})
+        session = self.client.start_session()
+        try:
+            with session.start_transaction():
+                result = self.collection.delete_one({"id": route_id})
 
-        if result.deleted_count == 0:
-            raise RouteNotFoundError(route_id)
+                if result.deleted_count == 0:
+                    raise RouteNotFoundError(route_id)
+
+            session.commit_transaction()
+        except Exception as e:
+            session.abort_transaction()
+            raise e
+        
+        finally:
+            session.end_session()
 
     def clear(self):
         self.collection.delete_many({})
