@@ -1,6 +1,8 @@
 import pymongo
 import dataclass_factory
 from pymongo.database import Database
+from pymongo.read_concern import ReadConcern
+from pymongo.write_concern import WriteConcern
 from src.domain.value_objects import HashId
 from src.domain.entities import Route
 from src.domain.errors import RouteNotFoundError
@@ -71,13 +73,13 @@ class RouteRepository:
 
     def update(self, route: Route):
         with self.client.start_session() as session:
-            with session.start_transaction():
+            with session.start_transaction(read_concern=ReadConcern("majority"), write_concern=WriteConcern("majority")):
                 route_dict = self.factory.dump(route)
                 self.collection.update_one({"id": route.id}, {"$set": route_dict})
 
     def delete(self, route_id: HashId):
         with self.client.start_session() as session:
-            with session.start_transaction():
+            with session.start_transaction(read_concern=ReadConcern("majority"), write_concern=WriteConcern("majority")):
                 result = self.collection.delete_one({"id": route_id})
 
                 if result.deleted_count == 0:
