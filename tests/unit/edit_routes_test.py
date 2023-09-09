@@ -5,6 +5,7 @@ from src.domain.entities import Spot
 from src.domain.entities import Place
 from src.domain.entities import Passenger
 from src.application.dto import UpdateRoutesDTO
+from src.domain.errors import RouteNotFoundError
 from src.application.usecases.edit_routes import EditRoutersUseCase
 
 class DataBaseMock:
@@ -95,6 +96,8 @@ class DataBaseMock:
         for i in range(len(self.routes)):
             if self.routes[i].id == route_id:
                 return self.routes[i]
+        
+        raise RouteNotFoundError(route_id)
          
 def test_update():
     db = DataBaseMock()
