@@ -32,6 +32,7 @@ from src.infrastructure.logger.decorators.view_routes import ViewServiceLogger
 from src.infrastructure.logger.decorators.notify_passenger import NotifyPassengerLogger
 from src.infrastructure.logger.decorators.publish_event import LogEventSenderDecorator
 from src.infrastructure.logger.decorators.db_speed import RepositoryTimedLoggeredDecorator
+from src.infrastructure.logger.decorators.availability_speed import AvailabilityTimedLoggeredDecorator
 
 logger = FileWriter("routes_app.log")
 config = settings.EnvSettingsExporter().load()
@@ -42,9 +43,8 @@ gmail_notifier = NotifyPassengerLogger(GmailNotifier(
     Letter("Автобусний Квиток", "letters/new_route.html")
 ), logger)
 
-
 view_usecase = ViewServiceLogger(ViewRoutesUseCase(db), logger)
-availability_usecase = AvailabilityServiceLogger(RouteAvailabilityUseCase(db), logger)
+availability_usecase = AvailabilityServiceLogger(AvailabilityTimedLoggeredDecorator(RouteAvailabilityUseCase(db), logger), logger)
 add_routes_usecase = AddRoutesLogger(AddRoutesUseCase(db), logger)
 edit_routers_usecase = EditRoutersLogger(EditRoutersUseCase(db), logger)
 delete_route_usecase = DeleteRouteLogger(SendEventOnDeleteRouteDecorator(DeleteRouteUseCase(db), event_notifier, db), logger)

@@ -19,7 +19,6 @@ class RouteRepository(typing.Protocol):
 
     def delete(self, route_id: HashId): ...
 
-
 _Method = typing.TypeVar('_Method', bound=typing.Callable)
 
 class RepositoryTimedLoggeredDecorator(RouteRepository):
