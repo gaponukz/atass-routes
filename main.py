@@ -31,7 +31,7 @@ from src.infrastructure.logger.decorators.route_availability import Availability
 from src.infrastructure.logger.decorators.view_routes import ViewServiceLogger
 from src.infrastructure.logger.decorators.notify_passenger import NotifyPassengerLogger
 from src.infrastructure.logger.decorators.publish_event import LogEventSenderDecorator
-from infrastructure.logger.decorators.speed import TimeLoggeredDecoratorFactory
+from src.infrastructure.logger.decorators.speed import TimeLoggeredDecoratorFactory
 
 logger = FileWriter("routes_app.log")
 time_logger = TimeLoggeredDecoratorFactory(logger)
