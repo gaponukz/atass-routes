@@ -31,12 +31,11 @@ from src.infrastructure.logger.decorators.route_availability import Availability
 from src.infrastructure.logger.decorators.view_routes import ViewServiceLogger
 from src.infrastructure.logger.decorators.notify_passenger import NotifyPassengerLogger
 from src.infrastructure.logger.decorators.publish_event import LogEventSenderDecorator
-from src.infrastructure.logger.decorators.speed import TimeLoggeredDecoratorFactory
+from src.infrastructure.logger.decorators.db_speed import RepositoryTimedLoggeredDecorator
 
 logger = FileWriter("routes_app.log")
-time_logger = TimeLoggeredDecoratorFactory(logger, {'info': 1, 'debug': 5, 'error': 5})
 config = settings.EnvSettingsExporter().load()
-db = time_logger.decorate(RouteRepository(config.mongodb_url, "Cluster0"))
+db = RepositoryTimedLoggeredDecorator(RouteRepository(config.mongodb_url, "Cluster0"), logger)
 event_notifier = LogEventSenderDecorator(RabbitMQEventNotifier(config.rabbitmq_url), logger)
 gmail_notifier = NotifyPassengerLogger(GmailNotifier(
     Creds(config.gmail, config.gmail_password),
