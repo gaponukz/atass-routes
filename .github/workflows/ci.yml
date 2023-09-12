@@ -55,7 +55,7 @@ jobs:
       if: steps.start-containers.outcome == 'success'
     - name: Show logs
       if: always()
-      run: cat routes_app.log
+      run: cat routes_app.log | cat routes_app_timing.log
     - name: Stop containers
       if: always()
       run: docker-compose -f "docker-compose.yml" down
