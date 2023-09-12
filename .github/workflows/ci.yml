@@ -54,6 +54,7 @@ jobs:
       run: python -m pytest tests/e2e
       if: steps.start-containers.outcome == 'success'
     - name: Show logs
+      if: always()
       run: cat routes_app.log
     - name: Stop containers
       if: always()
