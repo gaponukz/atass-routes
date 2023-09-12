@@ -34,9 +34,9 @@ from src.infrastructure.logger.decorators.publish_event import LogEventSenderDec
 from src.infrastructure.logger.decorators.speed import TimeLoggeredDecoratorFactory
 
 logger = FileWriter("routes_app.log")
-time_logger = TimeLoggeredDecoratorFactory(logger)
+time_logger = TimeLoggeredDecoratorFactory(logger, {'info': 1, 'debug': 5, 'error': 5})
 config = settings.EnvSettingsExporter().load()
-db = RouteRepository(config.mongodb_url, "Cluster0")
+db = time_logger.decorate(RouteRepository(config.mongodb_url, "Cluster0"))
 event_notifier = LogEventSenderDecorator(RabbitMQEventNotifier(config.rabbitmq_url), logger)
 gmail_notifier = NotifyPassengerLogger(GmailNotifier(
     Creds(config.gmail, config.gmail_password),
