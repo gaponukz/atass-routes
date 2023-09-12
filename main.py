@@ -31,8 +31,10 @@ from src.infrastructure.logger.decorators.route_availability import Availability
 from src.infrastructure.logger.decorators.view_routes import ViewServiceLogger
 from src.infrastructure.logger.decorators.notify_passenger import NotifyPassengerLogger
 from src.infrastructure.logger.decorators.publish_event import LogEventSenderDecorator
+from infrastructure.logger.decorators.speed import TimeLoggeredDecoratorFactory
 
 logger = FileWriter("routes_app.log")
+time_logger = TimeLoggeredDecoratorFactory(logger)
 config = settings.EnvSettingsExporter().load()
 db = RouteRepository(config.mongodb_url, "Cluster0")
 event_notifier = LogEventSenderDecorator(RabbitMQEventNotifier(config.rabbitmq_url), logger)
@@ -42,12 +44,12 @@ gmail_notifier = NotifyPassengerLogger(GmailNotifier(
 ), logger)
 
 
-view_usecase = ViewServiceLogger(ViewRoutesUseCase(db), logger)
-availability_usecase = AvailabilityServiceLogger(RouteAvailabilityUseCase(db), logger)
-add_routes_usecase = AddRoutesLogger(AddRoutesUseCase(db), logger)
-edit_routers_usecase = EditRoutersLogger(EditRoutersUseCase(db), logger)
-delete_route_usecase = DeleteRouteLogger(SendEventOnDeleteRouteDecorator(DeleteRouteUseCase(db), event_notifier, db), logger)
-change_places_usecase = PlaceServiceLogger(SendEventOnPlaceChangedDecorator(ManagePassengersUseCase(db), event_notifier), logger)
+view_usecase = ViewServiceLogger(time_logger.decorate(ViewRoutesUseCase(db)), logger)
+availability_usecase = AvailabilityServiceLogger(time_logger.decorate(RouteAvailabilityUseCase(db)), logger)
+add_routes_usecase = AddRoutesLogger(time_logger.decorate(AddRoutesUseCase(db)), logger)
+edit_routers_usecase = EditRoutersLogger(time_logger.decorate(EditRoutersUseCase(db)), logger)
+delete_route_usecase = DeleteRouteLogger(time_logger.decorate(SendEventOnDeleteRouteDecorator(time_logger.decorate(DeleteRouteUseCase(db)), event_notifier, db)), logger)
+change_places_usecase = PlaceServiceLogger(time_logger.decorate(SendEventOnPlaceChangedDecorator(time_logger.decorate(ManagePassengersUseCase(db)), event_notifier)), logger)
 
 add_routes_handler = AddRoutesHandler(add_routes_usecase)
 availability_handler = RouteAvailabilityHandler(availability_usecase)
