@@ -9,25 +9,25 @@ from src.domain.errors import RouteNotFoundError
 
 class RouteRepository:
     def __init__(self, connection_string, collection: str):
-        self.client: pymongo.MongoClient = pymongo.MongoClient(connection_string)
-        db: Database = self.client['Bus']
-        self.collection = db[collection]
-        self.factory = dataclass_factory.Factory()
+        self._client: pymongo.MongoClient = pymongo.MongoClient(connection_string)
+        db: Database = self._client['Bus']
+        self._collection = db[collection]
+        self._factory = dataclass_factory.Factory()
 
-        self.collection.create_index([("move_from.place.city", pymongo.ASCENDING)])
-        self.collection.create_index([("move_to.place.city", pymongo.ASCENDING)])
+        self._collection.create_index([("move_from.place.city", pymongo.ASCENDING)])
+        self._collection.create_index([("move_to.place.city", pymongo.ASCENDING)])
 
-        self.collection.create_indexes([
+        self._collection.create_indexes([
             pymongo.IndexModel([("move_from.place.city", pymongo.ASCENDING)]),
             pymongo.IndexModel([("move_to.place.city", pymongo.ASCENDING)])
         ])
 
     def create(self, route: Route):
-        route_dict = self.factory.dump(route)
-        self.collection.insert_one(route_dict)
+        route_dict = self._factory.dump(route)
+        self._collection.insert_one(route_dict)
 
     def read_all(self) -> list[Route]:
-        return [self.factory.load(route_dict, Route) for route_dict in self.collection.find()]
+        return [self._factory.load(route_dict, Route) for route_dict in self._collection.find()]
 
     def by_cities(self, move_from: str, move_to: str) -> list[Route]:
         query = {
@@ -37,7 +37,7 @@ class RouteRepository:
             ]
         }
         
-        return [self.factory.load(route_dict, Route) for route_dict in self.collection.find(query)]
+        return [self._factory.load(route_dict, Route) for route_dict in self._collection.find(query)]
 
     def with_cities(self, move_from: str, move_to) -> list[Route]:
         query = {
@@ -61,29 +61,29 @@ class RouteRepository:
             ]
         }
 
-        return [self.factory.load(route_dict, Route) for route_dict in self.collection.find(query)]
+        return [self._factory.load(route_dict, Route) for route_dict in self._collection.find(query)]
     
     def by_id(self, route_id: HashId) -> Route:
-        route = self.collection.find_one({"id": route_id})
+        route = self._collection.find_one({"id": route_id})
 
         if not route:
             raise RouteNotFoundError(route_id)
     
-        return self.factory.load(route, Route)
+        return self._factory.load(route, Route)
 
     def update(self, route: Route):
-        with self.client.start_session() as session:
+        with self._client.start_session() as session:
             with session.start_transaction(read_concern=ReadConcern("majority"), write_concern=WriteConcern("majority")):
-                route_dict = self.factory.dump(route)
-                self.collection.update_one({"id": route.id}, {"$set": route_dict})
+                route_dict = self._factory.dump(route)
+                self._collection.update_one({"id": route.id}, {"$set": route_dict})
 
     def delete(self, route_id: HashId):
-        with self.client.start_session() as session:
+        with self._client.start_session() as session:
             with session.start_transaction(read_concern=ReadConcern("majority"), write_concern=WriteConcern("majority")):
-                result = self.collection.delete_one({"id": route_id})
+                result = self._collection.delete_one({"id": route_id})
 
                 if result.deleted_count == 0:
                     raise RouteNotFoundError(route_id)
 
     def clear(self):
-        self.collection.delete_many({})
+        self._collection.delete_many({})

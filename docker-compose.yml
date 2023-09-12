@@ -40,3 +40,4 @@ services:
     volumes:
       - ./routes.json:/app/routes.json
       - ./routes_app.log:/app/routes_app.log
+      - ./routes_app_timing.log:/app/routes_app_timing.log
